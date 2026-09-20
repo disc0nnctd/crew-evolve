@@ -203,14 +203,14 @@ def installed_http_smoke(temporary_root: Path, artifact: Path, label: str, *, ne
         page = request(base, "/")
         if not isinstance(page, bytes) or b"Crew Evolve" not in page:
             raise AssertionError(f"{label} install did not return the packaged web page")
-        if browser:
-            browser_workflow(base, label)
         state = request(base, "/api/state")
         assert isinstance(state, dict)
         token = state["token"]
         demo = request(base, "/api/demo", body={}, token=token)
         if not isinstance(demo, dict) or "revision" not in demo:
             raise AssertionError(f"unexpected {label} demo response: {demo!r}")
+        if browser:
+            browser_workflow(base, label)
     finally:
         server.terminate()
         try:

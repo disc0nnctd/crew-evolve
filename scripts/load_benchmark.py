@@ -25,7 +25,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -216,23 +216,48 @@ def reset_result_cache(app: App) -> None:
 
 
 def run_requests(base: str, token: str, plans: Sequence[dict[str, Any]], clients: int) -> dict[str, Any]:
-    """Run plans concurrently and report queue-to-response wall latency."""
+    """Run plans with at most ``clients`` in flight and report request wall time."""
     if clients < 1:
         raise ValueError("clients must be positive")
     started = time.perf_counter()
-    if clients == 1:
-        observations = [_client_call(base, token, plan) for plan in plans]
-    else:
-        with ThreadPoolExecutor(max_workers=clients, thread_name_prefix="load-client") as pool:
-            observations = list(pool.map(lambda plan: _client_call(base, token, plan), plans))
-    wall_seconds = max(time.perf_counter() - started, 1e-9)
-    latencies = [float(item["latency_ms"]) for item in observations]
-    successes = [item for item in observations if item["status"] == 200 and "error" not in item["body"]]
-    cache_hits = sum(bool(item["body"].get("metrics", {}).get("cache_hit")) for item in successes)
+    latencies: list[float] = []
+    sample_observations: list[dict[str, Any]] = []
+    successes = 0
+    cache_hits = 0
     statuses: dict[str, int] = {}
-    for item in observations:
-        key = str(item["status"])
-        statuses[key] = statuses.get(key, 0) + 1
+
+    def consume(observation: dict[str, Any]) -> None:
+        nonlocal successes, cache_hits
+        latencies.append(float(observation["latency_ms"]))
+        status = observation["status"]
+        statuses[str(status)] = statuses.get(str(status), 0) + 1
+        body = observation["body"]
+        if status == 200 and "error" not in body:
+            successes += 1
+            cache_hits += int(bool(body.get("metrics", {}).get("cache_hit")))
+        if len(sample_observations) < 3:
+            sample_observations.append(observation)
+
+    if clients == 1:
+        for plan in plans:
+            consume(_client_call(base, token, plan))
+    else:
+        # Keep only ``clients`` futures in flight.  A full response is released
+        # as soon as its scalar metrics are consumed, except for three samples
+        # needed by the correctness oracle.
+        with ThreadPoolExecutor(max_workers=clients, thread_name_prefix="load-client") as pool:
+            plan_iterator = iter(plans)
+            pending = {pool.submit(_client_call, base, token, next(plan_iterator))
+                       for _ in range(min(clients, len(plans)))}
+            while pending:
+                done, pending = wait(pending, return_when=FIRST_COMPLETED)
+                for future in done:
+                    consume(future.result())
+                    try:
+                        pending.add(pool.submit(_client_call, base, token, next(plan_iterator)))
+                    except StopIteration:
+                        pass
+    wall_seconds = max(time.perf_counter() - started, 1e-9)
     queue_wall = {
         "p50": _round_or_none(percentile(latencies, 0.50)),
         "p95": _round_or_none(percentile(latencies, 0.95)),
@@ -240,20 +265,23 @@ def run_requests(base: str, token: str, plans: Sequence[dict[str, Any]], clients
     }
     return {
         "requests": len(plans),
+        "responses_counted": len(latencies),
+        "response_samples": len(sample_observations),
         "clients": clients,
         "wall_seconds": round(wall_seconds, 6),
+        "latency_definition": "client request wall time from JSON request start through response parse; closed-loop at most clients in flight",
         "queue_wall_ms": queue_wall,
         "p50_ms": queue_wall["p50"],
         "p95_ms": queue_wall["p95"],
         "p99_ms": queue_wall["p99"],
-        "throughput_rps": round(len(successes) / wall_seconds, 3),
-        "error_count": len(observations) - len(successes),
+        "throughput_rps": round(successes / wall_seconds, 3),
+        "error_count": len(plans) - successes,
         "statuses": statuses,
         "cache_hits": cache_hits,
-        "cache_hit_rate": round(cache_hits / len(successes), 6) if successes else 0.0,
+        "cache_hit_rate": round(cache_hits / successes, 6) if successes else 0.0,
         "model_calls": 0,
         "latency_scope": "structured plans over real loopback HTTP; no natural-language model calls",
-        "observations": observations,
+        "observations": sample_observations,
     }
 
 
@@ -445,12 +473,17 @@ def _http_oracle_report(datasets: dict[str, dict[str, Any]], observations: Seque
 
 
 def benchmark(crew: int = 100, history: int = 5, requests: int = 100,
-              clients: int | str | Iterable[int] = 1, *, seed: int = 7301) -> dict[str, Any]:
+              clients: int | str | Iterable[int] = 1, *, seed: int = 7301,
+              progress: Any = None) -> dict[str, Any]:
     """Run cold, rotating-cache, repeated-cache, and invalidation measurements."""
     for name, value in (("crew", crew), ("history", history), ("requests", requests)):
         if type(value) is not int or value < 1:
             raise ValueError(f"{name} must be a positive integer")
     client_counts = _parse_clients(clients)
+    def emit(message: str) -> None:
+        if progress is not None:
+            progress(message)
+
     datasets = synthetic_workload(crew, history, seed=seed)
     target_ids = [
         duty["duty_id"] for duty in datasets["duties"]["records"]
@@ -474,6 +507,7 @@ def benchmark(crew: int = 100, history: int = 5, requests: int = 100,
             cold_plan = plans[0]
             cold_status, cold_body, cold_latency = http_json(base, server.token, "/api/query", {"plan": cold_plan})
             old_revision = int(cold_body.get("revision", 0)) if cold_status == 200 else 0
+            emit(f"cold initialization complete (status={cold_status})")
 
             # Rotate 32 targets.  The app cache holds 16 plans, so a full cycle
             # cannot remain resident and repeated misses are intentional.
@@ -484,8 +518,10 @@ def benchmark(crew: int = 100, history: int = 5, requests: int = 100,
             for client_count in client_counts:
                 reset_result_cache(app)
                 rotating = run_requests(base, server.token, rotating_plans, client_count)
+                emit(f"clients={client_count} rotating complete ({rotating['requests']} requests)")
                 reset_result_cache(app)
                 repeated = run_requests(base, server.token, repeated_plans, client_count)
+                emit(f"clients={client_count} repeated complete ({repeated['requests']} requests)")
                 run_reports.append({
                     "clients": client_count,
                     "rotating": rotating,
@@ -555,6 +591,7 @@ def benchmark(crew: int = 100, history: int = 5, requests: int = 100,
                           invalidated_status == 200 and invalidated_body.get("revision") == current_revision and
                           invalidated_body.get("metrics", {}).get("cache_hit") is False,
             }
+            emit(f"revision invalidation complete (passed={invalidation['passed']})")
             # Full response bodies are useful for a few correctness samples,
             # but retaining every 10k-candidate response would make the JSON
             # report larger than the benchmark itself.
@@ -613,14 +650,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, default=Path("artifacts/load_benchmark.json"),
                         help="Write JSON report here as well as stdout (default: artifacts/load_benchmark.json).")
     args = parser.parse_args(argv)
-    report = benchmark(args.crew, args.history, args.requests, args.clients)
+    report = benchmark(
+        args.crew, args.history, args.requests, args.clients,
+        progress=lambda message: print(message, file=sys.stderr, flush=True),
+    )
     rendered = json.dumps(report, indent=2, sort_keys=True)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered + "\n", encoding="utf-8")
     def measured_summary(scenario: dict[str, Any]) -> dict[str, Any]:
         return {key: scenario[key] for key in (
-            "requests", "clients", "queue_wall_ms", "p50_ms", "p95_ms", "p99_ms",
+            "requests", "clients", "latency_definition", "queue_wall_ms", "p50_ms", "p95_ms", "p99_ms",
             "throughput_rps", "error_count", "cache_hits", "cache_hit_rate", "model_calls",
         ) if key in scenario}
 

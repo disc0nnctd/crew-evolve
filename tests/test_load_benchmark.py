@@ -15,6 +15,7 @@ from scripts.load_benchmark import (
     benchmark,
     percentile,
     report_failures,
+    run_requests,
     seed_store,
     synthetic_workload,
 )
@@ -36,6 +37,19 @@ class LoadBenchmarkTests(unittest.TestCase):
         from crew_evolve.store import DEMO_POLICY
 
         self.assertEqual(Engine(datasets, DEMO_POLICY, "indexed").integrity(), [])
+
+    def test_request_collection_counts_all_but_retains_three_bodies(self):
+        plans = [{"action": "coverage", "duty_id": f"TARGET-{index:04d}", "role": "captain"}
+                 for index in range(20)]
+
+        def fake_call(base, token, plan):
+            return {"status": 200, "body": {"metrics": {"cache_hit": False}, "plan": plan}, "latency_ms": 1.0}
+
+        with patch("scripts.load_benchmark._client_call", side_effect=fake_call):
+            report = run_requests("http://unused", "token", plans, clients=4)
+        self.assertEqual(report["responses_counted"], 20)
+        self.assertEqual(report["error_count"], 0)
+        self.assertLessEqual(len(report["observations"]), 3)
 
     def test_real_loopback_http_returns_full_structured_response(self):
         with TemporaryDirectory() as directory:
