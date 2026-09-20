@@ -75,6 +75,61 @@ _INJECTION_PATTERNS = (
     r"\bcall\s+(?:the\s+)?(?:tool|network)\b",
 )
 
+# Coverage currently checks the recorded roster, qualifications, availability,
+# duty length, rest, overlap, location, and rolling duty hours.  Keep the
+# unsupported qualifiers explicit so an approved coverage example cannot make
+# a broader request look answered.
+_UNSUPPORTED_CONSTRAINTS = (
+    ("cost", (
+        r"\bcheapest\b",
+        r"\blowest[- ]cost\b",
+        r"\bleast[- ]cost\b",
+        r"\bcost(?:s|ing)?\b",
+    )),
+    ("certificate validity", (
+        r"\b(?:valid|invalid|expired?|unexpired|expiry|expiration|expires?|renew(?:al|ed)?)\s+(?:medical\s+)?(?:certificate|certification|licen[cs]e)s?\b",
+        r"\b(?:medical\s+)?(?:certificate|certification|licen[cs]e)s?\s+(?:is\s+)?(?:valid|invalid|expired?|unexpired|due|expires?|expiry|expiration)\b",
+        r"\bmedical\s+(?:certificate|certification)\b",
+    )),
+    ("reserve callout windows", (
+        r"\breserve[- ](?:callout|call[- ]out|on[- ]call|window)\b",
+        r"\bon[- ]call\s+(?:window|availability)\b",
+        r"\bcall[- ]out\s+(?:window|availability)\b",
+    )),
+    ("calendar-day or flight-hour limits", (
+        r"\bcalendar[- ]days?\b",
+        r"\bflight[- ]hours?\b",
+        r"\bblock[- ]hours?\b",
+    )),
+    ("delay scenarios", (
+        r"\b(?:after|following)\s+(?:a\s+)?(?:[a-z0-9]+\s+){0,4}delay(?:ed|s|ing)?\b",
+        r"\b(?:if|when)\b[^.!?;]{0,80}\bdelay(?:ed|s|ing)?\b",
+    )),
+    ("positioning or sector rules", (
+        r"\bpositioning\b",
+        r"\bdeadhead(?:ing)?\b",
+        r"\bsectors?\b",
+    )),
+    ("named-person filters", (
+        r"\b(?:exclud(?:e|ing|ed)|omit(?:ting)?|leav(?:e|ing)(?:\s+out)?|except(?:\s+for)?|but\s+not)\s+(?:the\s+)?(?:crew\s+member\s+|person\s+)?[a-z][a-z'-]*(?:\s+[a-z][a-z'-]*)?\b",
+        r"\bwithout\s+(?!violat(?:e|ing)|break(?:ing)?|consider(?:ing)?|minimum|required|rest\b)(?:considering\s+)?(?:the\s+)?(?:crew\s+member\s+|person\s+)?[a-z][a-z'-]*(?:\s+[a-z][a-z'-]*)?\b",
+    )),
+    ("hypothetical changes", (
+        r"\b(?:if|when|assuming|suppose|supposing|what\s+if)\b[^.!?;]{0,80}\b(?:sick|ill|unavailable|absent|injured|calls?\s+in\s+sick|unfit)\b",
+    )),
+)
+
+_UNSUPPORTED_REPLIES = {
+    "cost": "I can check basic coverage from recorded availability, qualifications, and rest, but I cannot compare cost. Ask for a basic current coverage check.",
+    "certificate validity": "I can check recorded qualifications, but I cannot verify certificate validity or expiry. Ask for a basic current coverage check.",
+    "reserve callout windows": "I can check recorded availability, qualifications, and rest, but I cannot apply reserve callout windows. Correct existing availability data first or ask for a basic current coverage check.",
+    "calendar-day or flight-hour limits": "I can check recorded duty and rest information, but I cannot apply calendar-day or flight-hour limits. Ask for a basic current coverage check.",
+    "delay scenarios": "I can check current recorded coverage, but I cannot model a delay scenario. Ask for a basic current coverage check.",
+    "positioning or sector rules": "I can check basic current coverage, but I cannot apply positioning or sector rules. Ask for a basic current coverage check.",
+    "named-person filters": "I can check current coverage, but I cannot exclude named people. Ask for a basic current coverage check.",
+    "hypothetical changes": "I can check the current workspace, but I cannot evaluate hypothetical changes such as illness. Ask for a basic current coverage check.",
+}
+
 
 def _words(value: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", value.casefold())
@@ -236,6 +291,28 @@ def _matches(patterns: tuple[str, ...], question: str, positive: bool = True) ->
 
 def _unsafe(value: str) -> bool:
     return any(re.search(pattern, value.casefold()) for pattern in _INJECTION_PATTERNS)
+
+
+def _mask_known_values(question: str, duty_ids: list[str], roles: list[str]) -> str:
+    """Hide supplied identifiers before checking free-form constraints."""
+
+    masked = question
+    values = sorted((*duty_ids, *roles), key=lambda value: (-len(value), value.casefold(), value))
+    for value in values:
+        pattern = _role_pattern(value) if value in roles else _boundary_pattern(value)
+        masked = re.sub(pattern, lambda match: " " * len(match.group(0)), masked, flags=re.IGNORECASE)
+    return masked
+
+
+def _unsupported_constraint(question: str, duty_ids: list[str], roles: list[str]) -> tuple[str, str] | None:
+    masked = _mask_known_values(question, duty_ids, roles)
+    for label, patterns in _UNSUPPORTED_CONSTRAINTS:
+        for pattern in patterns:
+            # Negative filters such as "no expired certificates" still need
+            # unsupported data. Do not reuse action-negation logic here.
+            if re.search(pattern, masked, flags=re.IGNORECASE):
+                return label, _UNSUPPORTED_REPLIES[label]
+    return None
 
 
 def _writes_requested(question: str) -> bool:
@@ -436,9 +513,21 @@ def guard_request(question: str, duty_ids: Iterable[str] | Mapping[str, object],
             return {"action": "clarify", "reason": "unknown role", "reply": "Use one existing required role."}
         if len(found_duties) != 1 or len(found_roles) != 1:
             return {"action": "clarify", "reason": "missing or multiple coverage targets", "reply": "Specify one existing duty ID and one required role."}
+        unsupported = _unsupported_constraint(text, found_duties, found_roles)
+        if unsupported is not None:
+            label, reply = unsupported
+            return {"action": "clarify", "reason": "unsupported coverage constraints", "constraint": label, "reply": reply}
         return None
     if positive_actions in (["roster"], ["summary"]):
+        unsupported = _unsupported_constraint(text, found_duties, found_roles)
+        if unsupported is not None:
+            label, reply = unsupported
+            return {"action": "clarify", "reason": "unsupported coverage constraints", "constraint": label, "reply": reply}
         return None
+    unsupported = _unsupported_constraint(text, found_duties, found_roles)
+    if unsupported is not None:
+        label, reply = unsupported
+        return {"action": "clarify", "reason": "unsupported coverage constraints", "constraint": label, "reply": reply}
     # No known operation is a conservative abstention, with an explicit route
     # for the caller to show to the operator.
     return {"action": "clarify", "reason": "unsupported or ambiguous request", "reply": "Specify coverage, roster, or summary."}

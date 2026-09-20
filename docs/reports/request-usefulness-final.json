@@ -1,0 +1,273 @@
+{
+  "scope": "Fixed requests on the supplied small example, after one approved workflow correction; no general language or human usability claim",
+  "python": "3.12.3",
+  "model_calls": 0,
+  "case_specification": [
+    [
+      "basic",
+      "Who can cover D-100 as captain?",
+      "coverage"
+    ],
+    [
+      "new_duty",
+      "Who can cover D-101 as captain?",
+      "coverage"
+    ],
+    [
+      "missing_role",
+      "Who can cover D-100?",
+      "clarify"
+    ],
+    [
+      "unknown_duty",
+      "Who can cover D-999 as captain?",
+      "clarify"
+    ],
+    [
+      "cost",
+      "Who is the cheapest captain who can cover D-100?",
+      "clarify"
+    ],
+    [
+      "certificate",
+      "Who can cover D-100 as captain with a valid medical certificate?",
+      "clarify"
+    ],
+    [
+      "reserve",
+      "Who can cover D-100 as captain within their reserve on-call window?",
+      "clarify"
+    ],
+    [
+      "sick_followup",
+      "Who can cover D-100 as captain if Asha Rao is sick?",
+      "clarify"
+    ],
+    [
+      "person_exclusion",
+      "Who can cover D-100 as captain excluding Asha Rao?",
+      "clarify"
+    ],
+    [
+      "calendar_rule",
+      "Who can cover D-100 as captain under calendar-day limits?",
+      "clarify"
+    ],
+    [
+      "hypothetical_delay",
+      "Who can cover D-100 as captain after a three hour delay?",
+      "clarify"
+    ],
+    [
+      "write",
+      "Assign Asha Rao to D-100 as captain",
+      "clarify"
+    ]
+  ],
+  "case_specification_sha256": "652c65e4f972987bd70ab8e52d0f0fa40d045e93e08a8417ef4fc0689ced4056",
+  "source_sha256": {
+    "crew_evolve/app.py": "9a5cde3fb16723ffe69b54895030a610c8b0536d5566fcb8e27672089185648e",
+    "crew_evolve/workflows.py": "ce68ab26c99e361866d136dc0bbe99d7c9330f978f4e07cd037d2046df08eb68",
+    "crew_evolve/engine.py": "d747df877f5964a405b9b3e070aeb61c4815b40f9e8a64ba725ed30da68f1b20",
+    "scripts/request_usefulness.py": "230ddb589fc32a09d978990cf5414e981014037f1083ac5d52200a36fdbadc39",
+    "examples/crew.csv": "e0176b3aea9dcb7faa54537f58917ff8e90542b56bee3933d582809bb0169579",
+    "examples/duties.csv": "3ac7c83d3295ef61dc65b6da770ce1079750e9d1e2a3dbb6c4ad1f2aa3c7795b",
+    "examples/assignments.csv": "951ff242a82fd544dd98854b64c56745bad6b027645e3f3a942ad185f406284b"
+  },
+  "results": [
+    {
+      "id": "basic",
+      "question": "Who can cover D-100 as captain?",
+      "category": "supported_task",
+      "expected_action": "coverage",
+      "actual_action": "coverage",
+      "expected_passing_ids": [
+        "C-01"
+      ],
+      "observed_passing_ids": [
+        "C-01"
+      ],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "reason": null,
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "new_duty",
+      "question": "Who can cover D-101 as captain?",
+      "category": "supported_task",
+      "expected_action": "coverage",
+      "actual_action": "coverage",
+      "expected_passing_ids": [
+        "C-01",
+        "C-02"
+      ],
+      "observed_passing_ids": [
+        "C-01",
+        "C-02"
+      ],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "2 crew members pass the configured checks for D-101 / captain.",
+      "reason": null,
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "missing_role",
+      "question": "Who can cover D-100?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "Specify one existing duty ID and one required role.",
+      "reason": "missing or multiple coverage targets",
+      "limits": null
+    },
+    {
+      "id": "unknown_duty",
+      "question": "Who can cover D-999 as captain?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "Use one existing duty ID.",
+      "reason": "unknown duty ID",
+      "limits": null
+    },
+    {
+      "id": "cost",
+      "question": "Who is the cheapest captain who can cover D-100?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check basic coverage from recorded availability, qualifications, and rest, but I cannot compare cost. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "certificate",
+      "question": "Who can cover D-100 as captain with a valid medical certificate?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check recorded qualifications, but I cannot verify certificate validity or expiry. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "reserve",
+      "question": "Who can cover D-100 as captain within their reserve on-call window?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check recorded availability, qualifications, and rest, but I cannot apply reserve callout windows. Correct existing availability data first or ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "sick_followup",
+      "question": "Who can cover D-100 as captain if Asha Rao is sick?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check the current workspace, but I cannot evaluate hypothetical changes such as illness. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "person_exclusion",
+      "question": "Who can cover D-100 as captain excluding Asha Rao?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check current coverage, but I cannot exclude named people. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "calendar_rule",
+      "question": "Who can cover D-100 as captain under calendar-day limits?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check recorded duty and rest information, but I cannot apply calendar-day or flight-hour limits. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "hypothetical_delay",
+      "question": "Who can cover D-100 as captain after a three hour delay?",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can check current recorded coverage, but I cannot model a delay scenario. Ask for a basic current coverage check.",
+      "reason": "unsupported coverage constraints",
+      "limits": null
+    },
+    {
+      "id": "write",
+      "question": "Assign Asha Rao to D-100 as captain",
+      "category": "expected_clarification",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "expected_passing_ids": null,
+      "observed_passing_ids": [],
+      "passed": true,
+      "revision_unchanged": true,
+      "reply": "I can inspect coverage, the roster, or a summary; changes need the explicit write workflow.",
+      "reason": "write request",
+      "limits": null
+    }
+  ],
+  "totals": {
+    "supported_task": {
+      "passed": 2,
+      "count": 2
+    },
+    "expected_clarification": {
+      "passed": 10,
+      "count": 10
+    }
+  },
+  "all_checks_passed": true,
+  "limits": [
+    "Clarifications are not completed operational tasks.",
+    "Known-case repair does not prove understanding of arbitrary qualifiers.",
+    "No model training, measured operator time savings, or human usability trial."
+  ]
+}

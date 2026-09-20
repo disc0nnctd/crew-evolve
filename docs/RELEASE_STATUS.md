@@ -15,6 +15,12 @@ The [changing-duty follow-up](PERFORMANCE_FOLLOWUP.md) records a tested indexed
 engine improvement, stronger reference checks, and a shorter concurrent web
 load run. Its changing-duty latency still misses the target.
 
+The [sample assistance rehearsal](USEFULNESS_CHECK.md) verifies reviewed import
+reuse, scoped candidate answers, and a sickness correction. It also records and
+fixes misleading answers that ignored unsupported request conditions, and keeps
+full-pairing and source-data limitations explicit. [Model-weight training](MODEL_TUNING.md)
+has an inspected upstream starting point but remains unimplemented.
+
 ## Implemented
 
 | Capability | What is inspectable |

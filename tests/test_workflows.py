@@ -71,6 +71,50 @@ class WorkflowReuseTests(unittest.TestCase):
             self.assertEqual(guard_request(question, self.duties, self.roles)["reason"], reason)
             self.assertIsNone(route(question, self.duties, self.roles, learned))
 
+    def test_unsupported_constraints_keep_existing_guard_priorities(self):
+        learned = {"Who can cover {duty} as {role}?": "coverage"}
+        self.assertEqual(
+            guard_request("Who can cover D-999 as captain at the lowest cost?", self.duties, self.roles)["reason"],
+            "unknown duty ID",
+        )
+        self.assertEqual(
+            guard_request("Who can cover D-100 as unknown_role under calendar-day limits?", self.duties, self.roles)["reason"],
+            "unknown role",
+        )
+        self.assertEqual(
+            guard_request("Who can cover D-100 as captain and show the roster under calendar-day limits?", self.duties, self.roles)["reason"],
+            "multiple operations",
+        )
+        self.assertIsNone(guard_request("Who can cover D-100-calendar-day as captain?", ["D-100-calendar-day"], self.roles))
+        self.assertEqual(route("Who can cover D-100-calendar-day as captain?", ["D-100-calendar-day"], self.roles, learned)["action"], "coverage")
+
+    def test_unsupported_constraints_are_specific_and_block_approved_routes(self):
+        learned = {"Who can cover {duty} as {role}?": "coverage"}
+        cases = (
+            ("Who can cover D-100 as captain at the lowest cost?", "cost"),
+            ("Who can cover D-100 as captain with an unexpired medical certificate?", "certificate"),
+            ("Who can cover D-100 as captain with no expired certificates?", "certificate"),
+            ("Who can cover D-100 as captain without valid licences?", "certificate"),
+            ("Who can cover D-100 as captain using the reserve callout window?", "reserve"),
+            ("Who can cover D-100 as captain if Asha Rao is unavailable?", "hypothetical"),
+            ("Who can cover D-100 as captain leaving Asha Rao out?", "exclude"),
+            ("Who can cover D-100 as captain within flight-hour caps?", "flight-hour"),
+            ("Who can cover D-100 as captain considering aircraft positioning?", "positioning"),
+            ("Who can cover D-100 as captain on the same sector?", "sector"),
+            ("Who can cover D-100 as captain after a three hour delay?", "delay"),
+        )
+        for question, detail in cases:
+            guard = guard_request(question, self.duties, self.roles)
+            self.assertEqual(guard["reason"], "unsupported coverage constraints", question)
+            self.assertIn(detail, guard["reply"].lower(), question)
+            self.assertIsNone(route(question, self.duties, self.roles, learned), question)
+
+    def test_supported_coverage_qualifications_still_route(self):
+        learned = {"Who can cover {duty} as {role}?": "coverage"}
+        question = "Which qualified captain can cover D-100?"
+        self.assertIsNone(guard_request(question, self.duties, self.roles))
+        self.assertEqual(route(question, self.duties, self.roles, learned)["action"], "coverage")
+
     def test_summary_and_roster_negations_select_the_positive_operation(self):
         learned = {"Show the workspace": "summary", "Show the roster": "roster"}
         summary = route("Give me aggregate counts, not a duty-by-duty list.", self.duties, self.roles, learned)
@@ -173,6 +217,45 @@ class AppWorkflowCaseTests(unittest.TestCase):
             answer = app.ask("Who can cover d-100 as captain?")
             self.assertEqual(answer["plan"]["duty_id"], "d-100")
             self.assertEqual(app.model.context["duties"], [{"duty_id": "d-100"}])
+
+    def test_app_ask_and_teach_block_unsupported_constraints_before_model_or_learning(self):
+        class NeverModel:
+            configured = True
+            name = "must-not-route"
+
+            def route(self, question, context):
+                raise AssertionError("unsupported constraints must not reach the model")
+
+        with tempfile.TemporaryDirectory() as temp:
+            app = App(Store(Path(temp) / "workspace.sqlite"), NeverModel())
+            app.demo()
+            learned = app.teach("Who can cover D-100 as captain?", "coverage")
+            before_failed_teach = app.state()["learned"]
+            cases = (
+                ("Who can cover D-100 as captain at the lowest cost?", "cost"),
+                ("Who can cover D-100 as captain with an unexpired medical certificate?", "certificate"),
+                ("Who can cover D-100 as captain using the reserve callout window?", "reserve"),
+                ("Who can cover D-100 as captain if Asha Rao is unavailable?", "hypothetical"),
+                ("Who can cover D-100 as captain leaving Asha Rao out?", "exclude"),
+                ("Who can cover D-100 as captain within flight-hour caps?", "flight-hour"),
+                ("Who can cover D-100 as captain considering aircraft positioning?", "positioning"),
+                ("Who can cover D-100 as captain on the same sector?", "sector"),
+                ("Who can cover D-100 as captain after a three hour delay?", "delay"),
+            )
+            for question, detail in cases:
+                answer = app.ask(question)
+                self.assertEqual(answer["action"], "clarify", question)
+                self.assertEqual(answer["reason"], "unsupported coverage constraints", question)
+                self.assertIn(detail, answer["reply"].lower(), question)
+                self.assertEqual(answer["route_source"], "request checks")
+
+            with self.assertRaisesRegex(ValueError, "cannot compare cost"):
+                app.teach("Who can cover D-100 as captain at the lowest cost?", "coverage")
+            self.assertEqual(app.state()["learned"], before_failed_teach)
+
+            supported = app.ask("Which qualified captain can cover D-100?")
+            self.assertEqual(supported["action"], "coverage")
+            self.assertEqual(supported["plan"]["duty_id"], "D-100")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,598 @@
+{
+  "case_spec": {
+    "case_spec": {
+      "groups": [
+        "full crew import and reviewed contract reuse",
+        "two supplied P-2291 day-block coverage checks",
+        "workflow correction and reuse on a new target",
+        "assignment, stale revision, and release",
+        "review a new sick status and recompute scoped coverage",
+        "unsupported source concepts and nested roster abstention"
+      ],
+      "scope": "Captain coverage over a pilot two-slot projection; no full-pairing, certification, reserve, costs, calendar-day, flight-time, or multi-cabin-seat claims.",
+      "version": "sample-usefulness-1"
+    },
+    "hash": "4d4f4e21431af452c1b98b35963322cb5be26240c51af4b24c4678b4d68a142e",
+    "version": "sample-usefulness-1"
+  },
+  "cases": [
+    {
+      "contract_version": 1,
+      "expected": {
+        "canonical_fields": "exact",
+        "records": 150
+      },
+      "mapping": {
+        "base": "base",
+        "crew_id": "crew_id",
+        "name": "name",
+        "rank": "role",
+        "ratings": "aircraft",
+        "status": "available"
+      },
+      "name": "full150 crew import",
+      "observed": {
+        "actual_hash": "29457cb208adef7ee98a969da130bd809c0e6acf27778f1cf03720f862adae42",
+        "expected_hash": "29457cb208adef7ee98a969da130bd809c0e6acf27778f1cf03720f862adae42",
+        "mismatch_count": 0,
+        "mismatches": [],
+        "records": 150
+      },
+      "preview_issue": "Map required fields: aircraft, available",
+      "projected_role_counts": {
+        "Cabin Crew": 67,
+        "Captain": 28,
+        "First Officer": 29,
+        "Senior Cabin Crew": 26
+      },
+      "projected_status_counts": {
+        "active": 142,
+        "leave": 6,
+        "training": 2
+      },
+      "result": "pass",
+      "source_ids": [
+        "C-1017",
+        "C-1021",
+        "C-1042",
+        "C-1313",
+        "C-1317",
+        "C-1326",
+        "C-1329",
+        "C-1385",
+        "C-1414",
+        "C-1443",
+        "C-1510",
+        "C-1526",
+        "C-1542",
+        "C-1564",
+        "C-1568",
+        "C-1569",
+        "C-1594",
+        "C-1600",
+        "C-1606",
+        "C-1622",
+        "C-1671",
+        "C-1694",
+        "C-1748",
+        "C-1823",
+        "C-1873",
+        "C-1895",
+        "C-1938",
+        "C-1970",
+        "C-2083",
+        "C-2085",
+        "C-2087",
+        "C-2091",
+        "C-2100",
+        "C-2111",
+        "C-2143",
+        "C-2148",
+        "C-2165",
+        "C-2210",
+        "C-2221",
+        "C-2248",
+        "C-2252",
+        "C-2286",
+        "C-2295",
+        "C-2303",
+        "C-2341",
+        "C-2352",
+        "C-2435",
+        "C-2442",
+        "C-2561",
+        "C-2569",
+        "C-2751",
+        "C-2791",
+        "C-2796",
+        "C-2840",
+        "C-2875",
+        "C-2876",
+        "C-2888",
+        "C-2907",
+        "C-2993",
+        "C-3005",
+        "C-3046",
+        "C-3057",
+        "C-3116",
+        "C-3136",
+        "C-3145",
+        "C-3167",
+        "C-3171",
+        "C-3187",
+        "C-3211",
+        "C-3231",
+        "C-3249",
+        "C-3266",
+        "C-3271",
+        "C-3305",
+        "C-3310",
+        "C-3311",
+        "C-3312",
+        "C-3315",
+        "C-3316",
+        "C-3334",
+        "C-3430",
+        "C-3460",
+        "C-3545",
+        "C-3555",
+        "C-3569",
+        "C-3619",
+        "C-3677",
+        "C-3721",
+        "C-3757",
+        "C-3791",
+        "C-3816",
+        "C-3864",
+        "C-3897",
+        "C-3940",
+        "C-3973",
+        "C-3983",
+        "C-3988",
+        "C-4104",
+        "C-4242",
+        "C-4273",
+        "C-4280",
+        "C-4296",
+        "C-4326",
+        "C-4395",
+        "C-4458",
+        "C-4462",
+        "C-4465",
+        "C-4520",
+        "C-4531",
+        "C-4574",
+        "C-4588",
+        "C-4621",
+        "C-4622",
+        "C-4679",
+        "C-4763",
+        "C-4806",
+        "C-4809",
+        "C-4839",
+        "C-4874",
+        "C-4999",
+        "C-5015",
+        "C-5020",
+        "C-5089",
+        "C-5119",
+        "C-5158",
+        "C-5168",
+        "C-5211",
+        "C-5363",
+        "C-5375",
+        "C-5392",
+        "C-5417",
+        "C-5418",
+        "C-5444",
+        "C-5522",
+        "C-5533",
+        "C-5566",
+        "C-5597",
+        "C-5647",
+        "C-5666",
+        "C-5716",
+        "C-5723",
+        "C-5751",
+        "C-5788",
+        "C-5795",
+        "C-5820",
+        "C-5837",
+        "C-5848",
+        "C-5881",
+        "C-5906",
+        "C-5994"
+      ],
+      "transforms": {
+        "rank": {
+          "op": "enum",
+          "values": {
+            "Cabin Crew": "cabin_crew",
+            "Captain": "captain",
+            "First Officer": "first_officer",
+            "Senior Cabin Crew": "senior_cabin_crew"
+          }
+        },
+        "status": {
+          "op": "enum",
+          "values": {
+            "active": "true",
+            "leave": "false",
+            "training": "false"
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "restore_contract_reused": true,
+        "restore_records": 150,
+        "restored_mismatch_count": 0,
+        "subset_contract_reused": true
+      },
+      "name": "same source schema reuses reviewed contract",
+      "observed": {
+        "restore_contract_reused": true,
+        "restore_mapping_reused": true,
+        "restore_records": 150,
+        "restore_status": "unchanged",
+        "restore_transforms_reused": true,
+        "restored_canonical": {
+          "actual_hash": "29457cb208adef7ee98a969da130bd809c0e6acf27778f1cf03720f862adae42",
+          "expected_hash": "29457cb208adef7ee98a969da130bd809c0e6acf27778f1cf03720f862adae42",
+          "mismatch_count": 0,
+          "mismatches": []
+        },
+        "restored_mismatch_count": 0,
+        "subset_canonical": {
+          "actual_hash": "687d953ec5154c7965bc290b63b395a6253692c3a703c13c2a785d0f77314b58",
+          "expected_hash": "687d953ec5154c7965bc290b63b395a6253692c3a703c13c2a785d0f77314b58",
+          "mismatch_count": 0,
+          "mismatches": []
+        },
+        "subset_contract_reused": true,
+        "subset_mapping_reused": true,
+        "subset_records": 14,
+        "subset_status": "unchanged",
+        "subset_transforms_reused": true
+      },
+      "result": "pass"
+    },
+    {
+      "expected": [
+        "C-1017",
+        "C-1042",
+        "C-1443",
+        "C-1526",
+        "C-1938",
+        "C-2087",
+        "C-2143",
+        "C-3187",
+        "C-3305",
+        "C-3310",
+        "C-3940",
+        "C-3983",
+        "C-5566",
+        "C-5647",
+        "C-5820",
+        "C-5837"
+      ],
+      "name": "scoped coverage P-2291-2026-09-15",
+      "observed": [
+        "C-1017",
+        "C-1042",
+        "C-1443",
+        "C-1526",
+        "C-1938",
+        "C-2087",
+        "C-2143",
+        "C-3187",
+        "C-3305",
+        "C-3310",
+        "C-3940",
+        "C-3983",
+        "C-5566",
+        "C-5647",
+        "C-5820",
+        "C-5837"
+      ],
+      "provenance": "source-derived facts filtered before engine invocation",
+      "result": "pass",
+      "scoped_rehearsal": true
+    },
+    {
+      "expected": [
+        "C-2210"
+      ],
+      "name": "scoped coverage P-2291-2026-09-16",
+      "observed": [
+        "C-2210"
+      ],
+      "provenance": "source-derived facts filtered before engine invocation",
+      "result": "pass",
+      "scoped_rehearsal": true
+    },
+    {
+      "actual_reasons": {
+        "C-2091": [
+          "No recorded qualification for A320."
+        ],
+        "C-2210": [
+          "Last recorded location is DEL; duty starts at BLR. Positioning is not modeled."
+        ]
+      },
+      "expected": {
+        "C-2087_is_scoped_only": true,
+        "C-2091_aircraft_rejected_day1": true,
+        "C-2210_location_rejected_day1": true,
+        "C-3310_passes_day1": true
+      },
+      "name": "fixed source fact filters",
+      "note": "C-2087 passing means only this no-history rehearsal; source scenario rules reject it on cumulative history.",
+      "observed": {
+        "C-2087_is_scoped_only": true,
+        "C-2091_aircraft_rejected_day1": true,
+        "C-2210_location_rejected_day1": true,
+        "C-3310_passes_day1": true
+      },
+      "result": "pass"
+    },
+    {
+      "baseline_projection": true,
+      "expected": "capability gap: blocks are not linked by history or atomic pairing state",
+      "gap": "full pairing continuity, overnight location, and cumulative history are unsupported",
+      "name": "P-2291 two-day continuity",
+      "observed": {
+        "C-1042_day1_passes": true,
+        "C-3310_day2_passes": false,
+        "atomic_pairing_supported": false,
+        "day1_actual_passing": [
+          "C-1017",
+          "C-1042",
+          "C-1443",
+          "C-1526",
+          "C-1938",
+          "C-2087",
+          "C-2143",
+          "C-3187",
+          "C-3305",
+          "C-3310",
+          "C-3940",
+          "C-3983",
+          "C-5566",
+          "C-5647",
+          "C-5820",
+          "C-5837"
+        ],
+        "day2_actual_passing": [
+          "C-2210"
+        ],
+        "sick_event_applied": false
+      },
+      "result": "capability_gap"
+    },
+    {
+      "expected": {
+        "after_action": "coverage",
+        "before_action": "clarify",
+        "manual_corrections": 1
+      },
+      "name": "teach exact day1 then reuse on day2",
+      "no_timesavings_claim": true,
+      "observed": {
+        "after_action": "coverage",
+        "after_target": "P-2291-2026-09-16",
+        "before_action": "clarify",
+        "learning_status": "active",
+        "manual_corrections": 1
+      },
+      "result": "pass"
+    },
+    {
+      "expected": {
+        "released": true,
+        "stale_rejected": true
+      },
+      "name": "assignment stale revision and release",
+      "observed": {
+        "assigned_crew": "C-3310",
+        "assignment_revision": 6,
+        "released": true,
+        "stale_error": "The workspace changed. Refresh and review the current data before applying this change.",
+        "stale_rejected": true
+      },
+      "result": "pass"
+    },
+    {
+      "expected": {
+        "available": false,
+        "crew_id": "C-1042",
+        "other_records_unchanged": true,
+        "passing_ids": [
+          "C-1017",
+          "C-1443",
+          "C-1526",
+          "C-1938",
+          "C-2087",
+          "C-2143",
+          "C-3187",
+          "C-3305",
+          "C-3310",
+          "C-3940",
+          "C-3983",
+          "C-5566",
+          "C-5647",
+          "C-5820",
+          "C-5837"
+        ],
+        "unknown_status_rejected": true
+      },
+      "name": "review sick status then recompute coverage",
+      "note": "Explicit availability-only overlay after baseline checks; not the full S2 scenario or its legality/cost answer.",
+      "observed": {
+        "accepted": true,
+        "cache_hit": false,
+        "canonical_comparison": {
+          "actual_hash": "76878fccbafb2d26723be90f999e724efa404ca8761b012f7019ec368ee8982d",
+          "expected_hash": "76878fccbafb2d26723be90f999e724efa404ca8761b012f7019ec368ee8982d",
+          "mismatch_count": 0,
+          "mismatches": []
+        },
+        "passing_ids": [
+          "C-1017",
+          "C-1443",
+          "C-1526",
+          "C-1938",
+          "C-2087",
+          "C-2143",
+          "C-3187",
+          "C-3305",
+          "C-3310",
+          "C-3940",
+          "C-3983",
+          "C-5566",
+          "C-5647",
+          "C-5820",
+          "C-5837"
+        ],
+        "preview_kept_baseline": true,
+        "review_passed": true,
+        "unknown_status_issue": "Record 3: unknown enum value: sick",
+        "unknown_status_rejected": true
+      },
+      "result": "pass",
+      "reviewed_mapping_changes": 1
+    },
+    {
+      "expected": "clarify/abstain without coverage answer",
+      "gap": "unsupported source concept",
+      "name": "unsupported cost question",
+      "observed": {
+        "action": "clarify",
+        "has_result": false,
+        "reply": "I can check basic coverage from recorded availability, qualifications, and rest, but I cannot compare cost. Ask for a basic current coverage check."
+      },
+      "result": "expected_abstention"
+    },
+    {
+      "expected": "clarify/abstain without coverage answer",
+      "gap": "unsupported source concept",
+      "name": "unsupported certification question",
+      "observed": {
+        "action": "clarify",
+        "has_result": false,
+        "reply": "Use one existing duty ID."
+      },
+      "result": "expected_abstention"
+    },
+    {
+      "expected": "clarify/abstain without coverage answer",
+      "gap": "unsupported source concept",
+      "name": "unsupported reserve question",
+      "observed": {
+        "action": "clarify",
+        "has_result": false,
+        "reply": "Specify coverage, roster, or summary."
+      },
+      "result": "expected_abstention"
+    },
+    {
+      "expected": "abstention/rejection",
+      "gap": "nested pairings require an explicit reviewed projection",
+      "name": "nested original rosters import",
+      "observed": {
+        "accepted": false,
+        "issue": "JSON must contain an array of objects."
+      },
+      "result": "expected_abstention"
+    }
+  ],
+  "code_hashes_end": {
+    "crew_evolve/app.py": "9a5cde3fb16723ffe69b54895030a610c8b0536d5566fcb8e27672089185648e",
+    "crew_evolve/engine.py": "d747df877f5964a405b9b3e070aeb61c4815b40f9e8a64ba725ed30da68f1b20",
+    "crew_evolve/workflows.py": "ce68ab26c99e361866d136dc0bbe99d7c9330f978f4e07cd037d2046df08eb68",
+    "scripts/sample_usefulness.py": "57b972719e22ff8a2b0bdaf339baa734f55c876c79f9f52bbefea4f148af2911"
+  },
+  "code_hashes_start": {
+    "crew_evolve/app.py": "9a5cde3fb16723ffe69b54895030a610c8b0536d5566fcb8e27672089185648e",
+    "crew_evolve/engine.py": "d747df877f5964a405b9b3e070aeb61c4815b40f9e8a64ba725ed30da68f1b20",
+    "crew_evolve/workflows.py": "ce68ab26c99e361866d136dc0bbe99d7c9330f978f4e07cd037d2046df08eb68",
+    "scripts/sample_usefulness.py": "57b972719e22ff8a2b0bdaf339baa734f55c876c79f9f52bbefea4f148af2911"
+  },
+  "code_unchanged_during_run": true,
+  "failures": [],
+  "runner": {
+    "created_utc": "2026-09-20T10:52:51.712820+00:00",
+    "version": "1"
+  },
+  "scope": {
+    "crew_projection": "rank -> supported role; active -> available; leave/training -> unavailable",
+    "duty_projection": "two supplied P-2291 day blocks, captain/first_officer roles only, no history or assignments",
+    "limitations": [
+      "three identical cabin-seat positions are omitted because the supported duty schema requires unique role slots",
+      "the two P-2291 days are separate supplied duty blocks; no atomic full-pairing plan is claimed",
+      "the coverage check is captain-only; first_officer is retained as the second projected pilot slot but not queried",
+      "calendar-day duty and flight-time rules are unsupported by the demo engine",
+      "certifications, reserve windows, costs, positioning, and multiple cabin seats are unsupported",
+      "passing here is a scoped rehearsal, not full sample scenario legality"
+    ]
+  },
+  "source": {
+    "crew_evolve_version": "workspace-source",
+    "data_gaps": {
+      "all_licences_future_relative_to_snapshot": true,
+      "licence_valid_from_after_snapshot": 150,
+      "note": "Certification validity is not evaluated; all 150 source licence start dates need operator review against the snapshot date."
+    },
+    "directory": "/home/notdc/aircrew-agent/problem_statement/data",
+    "hashes": {
+      "certifications.json": "68bc77e74f8716f0226e70b6fda69c1ed7bc319db341abb3c7c7dd3a5a7939ce",
+      "costs.json": "995496edf2f96f60d8c7d9825d91e93613c2292032bb0966fbbf1235a520b187",
+      "crew.json": "858ea44e9121d9b2fabf0f8dbc8c9ceaa2830c8012653bbd496ec414a52f7001",
+      "duty_clocks.json": "cfda74be37400d21d896683b7b96fb0c49eaee8fbfefe424c7525d1815f3dd00",
+      "flights.json": "438d1b827830e1d373b84747fa8a22094b4cbe0ddf686b6fd277ef8e794ae97e",
+      "questions.json": "ecd9a3869fb36e0eaa1bf8aa3256bb8a9725497b3edb963a760b322d6d521f47",
+      "reserve_pool.json": "5b9f91ebc7ae866883ed0f56132644e552612aa042bee2f85115b5db1e8666ee",
+      "risk_signals.json": "abb90e1915f6d1a5192d9e72205d3bda202073503f21bae9959481407422a309",
+      "rosters.json": "018bfae4d234a840a9c1723e5e05af1f72e11856f1c5f6f3619ab52ca4d62724",
+      "rules.json": "691f584b03958b80eb3ab7d0b266dd9403f6df7c26321cad72089ccc929aaaed",
+      "scenarios.json": "2455f52783a4e59ffa393001c32708f3eed2ae0578b00c2cbb4cba69fcd8c5aa"
+    },
+    "machine": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "source_hashes_end": {
+    "certifications.json": "68bc77e74f8716f0226e70b6fda69c1ed7bc319db341abb3c7c7dd3a5a7939ce",
+    "costs.json": "995496edf2f96f60d8c7d9825d91e93613c2292032bb0966fbbf1235a520b187",
+    "crew.json": "858ea44e9121d9b2fabf0f8dbc8c9ceaa2830c8012653bbd496ec414a52f7001",
+    "duty_clocks.json": "cfda74be37400d21d896683b7b96fb0c49eaee8fbfefe424c7525d1815f3dd00",
+    "flights.json": "438d1b827830e1d373b84747fa8a22094b4cbe0ddf686b6fd277ef8e794ae97e",
+    "questions.json": "ecd9a3869fb36e0eaa1bf8aa3256bb8a9725497b3edb963a760b322d6d521f47",
+    "reserve_pool.json": "5b9f91ebc7ae866883ed0f56132644e552612aa042bee2f85115b5db1e8666ee",
+    "risk_signals.json": "abb90e1915f6d1a5192d9e72205d3bda202073503f21bae9959481407422a309",
+    "rosters.json": "018bfae4d234a840a9c1723e5e05af1f72e11856f1c5f6f3619ab52ca4d62724",
+    "rules.json": "691f584b03958b80eb3ab7d0b266dd9403f6df7c26321cad72089ccc929aaaed",
+    "scenarios.json": "2455f52783a4e59ffa393001c32708f3eed2ae0578b00c2cbb4cba69fcd8c5aa"
+  },
+  "source_hashes_start": {
+    "certifications.json": "68bc77e74f8716f0226e70b6fda69c1ed7bc319db341abb3c7c7dd3a5a7939ce",
+    "costs.json": "995496edf2f96f60d8c7d9825d91e93613c2292032bb0966fbbf1235a520b187",
+    "crew.json": "858ea44e9121d9b2fabf0f8dbc8c9ceaa2830c8012653bbd496ec414a52f7001",
+    "duty_clocks.json": "cfda74be37400d21d896683b7b96fb0c49eaee8fbfefe424c7525d1815f3dd00",
+    "flights.json": "438d1b827830e1d373b84747fa8a22094b4cbe0ddf686b6fd277ef8e794ae97e",
+    "questions.json": "ecd9a3869fb36e0eaa1bf8aa3256bb8a9725497b3edb963a760b322d6d521f47",
+    "reserve_pool.json": "5b9f91ebc7ae866883ed0f56132644e552612aa042bee2f85115b5db1e8666ee",
+    "risk_signals.json": "abb90e1915f6d1a5192d9e72205d3bda202073503f21bae9959481407422a309",
+    "rosters.json": "018bfae4d234a840a9c1723e5e05af1f72e11856f1c5f6f3619ab52ca4d62724",
+    "rules.json": "691f584b03958b80eb3ab7d0b266dd9403f6df7c26321cad72089ccc929aaaed",
+    "scenarios.json": "2455f52783a4e59ffa393001c32708f3eed2ae0578b00c2cbb4cba69fcd8c5aa"
+  },
+  "source_unchanged": true,
+  "summary": {
+    "capability_gaps": 1,
+    "completed": 8,
+    "expected_abstentions": 4,
+    "failures": 0,
+    "unsupported_gaps": 5
+  }
+}

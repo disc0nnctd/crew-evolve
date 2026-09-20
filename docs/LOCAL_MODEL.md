@@ -54,3 +54,7 @@ The check is evidence for this cache and machine only. It is not a routing or
 mapping benchmark, and the local model is never autoactivated by learned
 weights.
 
+Laya supplies an upstream recipe for actual model-weight training. The separate
+[model-tuning design](MODEL_TUNING.md) records inspected code, private output
+requirements, and the proposed evaluation loop. That training loop is not yet
+implemented here; saved corrections currently change configuration only.

@@ -1,0 +1,52 @@
+{
+  "scope": "Read-only audit of original synthetic sample, separate from new assistant functionality",
+  "sha256": {
+    "crew.json": "858ea44e9121d9b2fabf0f8dbc8c9ceaa2830c8012653bbd496ec414a52f7001",
+    "flights.json": "438d1b827830e1d373b84747fa8a22094b4cbe0ddf686b6fd277ef8e794ae97e",
+    "rosters.json": "018bfae4d234a840a9c1723e5e05af1f72e11856f1c5f6f3619ab52ca4d62724",
+    "certifications.json": "68bc77e74f8716f0226e70b6fda69c1ed7bc319db341abb3c7c7dd3a5a7939ce",
+    "rules.json": "691f584b03958b80eb3ab7d0b266dd9403f6df7c26321cad72089ccc929aaaed",
+    "scenarios.json": "2455f52783a4e59ffa393001c32708f3eed2ae0578b00c2cbb4cba69fcd8c5aa",
+    "questions.json": "ecd9a3869fb36e0eaa1bf8aa3256bb8a9725497b3edb963a760b322d6d521f47"
+  },
+  "counts": {
+    "crew": 150,
+    "flights": 147,
+    "pairings": 39,
+    "certifications": 600,
+    "questions": 38,
+    "scenarios": 6
+  },
+  "source_data_findings": [
+    {
+      "issue": "Certificate validity starts after the sample operating week",
+      "affected_certificates": 150,
+      "by_type": {
+        "licence": 150
+      },
+      "sample_week_end": "2026-09-20",
+      "illustration": {
+        "crew_id": "C-1042",
+        "cert_type": "licence",
+        "valid_from": "2030-01-24",
+        "valid_to": "2032-01-24"
+      },
+      "consequence": "Original answer keys must not be treated as verified operational legality labels."
+    }
+  ],
+  "capability_gaps": [
+    "Nested pairing/flight JSON requires explicit reshaping into supplied duty blocks",
+    "Multiple cabin positions per role are not representable",
+    "No atomic multi-day pairing replacement",
+    "No certificate validity checks",
+    "No reserve-window or reachability checks",
+    "No cost/deadhead/delay optimization",
+    "Rolling 168h differs from source calendar-day duty accounting; original daily totals cannot become timestamped history without assumptions",
+    "No 28-day flight-hours or sector-dependent duty limit"
+  ],
+  "notes": [
+    "These findings do not claim all original answer keys are correct or all model training labels are usable.",
+    "No original file was changed.",
+    "A source active status is not verified availability for any proposed duty."
+  ]
+}

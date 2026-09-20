@@ -58,6 +58,15 @@ explicit negation to disambiguate scope, for example “aggregate counts, not a
 duty-by-duty list” and the reverse. Prompt-like instructions are treated as
 untrusted text and never influence routing.
 
+A bounded vocabulary also clarifies unsupported conditions: cost, certificate
+validity, reserve windows, calendar-day or flight-hour limits, delays,
+positioning/sector rules, named-person filters, and hypothetical changes. This
+guard runs before an approved template or model can reduce the question to basic
+coverage. Negative filters such as "no expired certificates" still require
+unsupported data and are clarified. This is a known-phrase guard, not a proof of
+general understanding. See the [sample rehearsal](USEFULNESS_CHECK.md) for the
+original failures and corrected behavior.
+
 Reuse stays conservative: no approved example means no automatic route, and
 unclear or conflicting candidates return `None`. The caller remains responsible
 for running the returned read-only plan through `App.execute` and for using a
