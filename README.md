@@ -61,6 +61,12 @@ The model can suggest field mappings, route a question to an allowed operation, 
 
 ## Measurements
 
+The [typed-decision research](docs/TYPED_DECISIONS.md) follows the Jev/Laya
+discussion with an offline comparison on requests and column mappings derived
+from our samples. It includes source links, frozen evaluation fixtures, raw
+predictions, and optional reproduction commands. These models are experimental;
+they are not used by the operations workspace.
+
 ```bash
 python3 -m unittest discover -v
 python3 -m crew_evolve.optimize --sizes 100,1000,5000 --repeats 7 \

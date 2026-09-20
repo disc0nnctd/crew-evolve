@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+.venv-research/
 .env
 .crew-evolve/
 *.sqlite*
