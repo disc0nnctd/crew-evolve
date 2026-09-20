@@ -1,0 +1,12 @@
+{
+  "completed_at": "2026-09-20T09:44:53.130859+00:00",
+  "source_commit": "4448641160580a9a97f01a8f1c7905c44596912d",
+  "frozen_sources_unchanged": true,
+  "reports": {
+    "adaptation-final-aliases.json": "23f15b887240e04bdbf8c56d3870323e30eeb8c67bad4c0824a5a373890afa6b",
+    "adaptation-final-contracts.json": "fca7fcf78ed9534cd180bd3d95d0d618e942f481bcc4f019810d60d5de5c126b",
+    "adaptation-development-contracts.json": "b885a966f912909643b206d55ef58f74827342c29cf04452be7381d7256907d9",
+    "adaptation-development-aliases.json": "25450aae8df17705f41bd36a3556047c99c8911d5e50d35bb75dc874d4351964"
+  },
+  "decision": "Record all outcomes; no tuning of this final split. New tuning requires a new reserved evaluation."
+}

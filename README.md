@@ -62,8 +62,9 @@ The package smoke command builds a wheel and source archive, installs each
 outside the checkout, and checks the web assets and example-data flow. The
 adaptation protocol is documented in [ADAPTATION.md](docs/ADAPTATION.md); the
 full request load procedure is [LOAD_BENCHMARK.md](docs/LOAD_BENCHMARK.md).
-Those measurements and the typed-decision research remain under review. They
-are not achieved production targets or claims about independent human use.
+See [measured results and limits](docs/BUILD_VERIFICATION.md) for the frozen
+synthetic evaluation and verification record. These are not production targets
+achieved or claims about independent human use.
 
 The repository remains private. Publication, license selection, and an
 independent human trial are pending owner review. Do not add real crew data,

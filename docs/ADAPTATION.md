@@ -28,9 +28,11 @@ produce the same manifest and content.
 The frozen feedback budgets are `0`, `1`, `5`, `10`, and `20`, with five
 scenario seeds. Each stream contains more than twenty chronological valid
 future cases with changed names, identifiers, dates, and availability values.
-It scores a request first, then reveals at most one source field packet. Both
-baselines receive the same mapping packet; the explicit contract path also
-uses its declared transform, while aliases ignore unsupported semantics. The
+It scores a request first, then reveals at most one source field packet. The input sequence and maximum correction budget are paired. Feedback is
+selected from each method's current failures; its packet sequence, timing,
+count, and information can differ. Contracts can consume declared transforms,
+while aliases use mappings. This is an end-to-end comparison, not an
+isolated effect under equal-information feedback. The
 contract vocabulary is `boolean` with `invert`, `enum` with explicit `values`,
 and `datetime` with an explicit format and timezone.
 
@@ -55,14 +57,14 @@ Rows inside a family or scenario are correlated, so the report does not treat
 them as independent observations or print inflated significance. The fixed
 model, word classifier, and sentence model baselines are marked `not-run`.
 
-`--split final` is refused without explicit release-owner credentials. The
-final v2 holdout is reserved; the runner requires `--unlock-final`, the
-protocol version, confirmation string, and manifest hash before a one-time
-release run. No such authorized run has occurred yet. The
-v1 final attempt is recorded in `benchmarks/adaptation/EVALUATION_LOG.md`, and
-its scores are excluded from tuning and reporting. After tuning stops, the
-release owner must freeze and unlock v2 once, preserving raw output separately
-from development reports. A later revision needs a new final holdout.
+`--split final` is refused without explicit maintainer intent: `--unlock-final`,
+`--final-version 2.0`, `--confirm-final CREW-EVOLVE-ADAPTATION-FINAL-V2`, and
+`--manifest-sha256` with the exact frozen hash. These are intentional-run guards,
+not credentials or a sealed holdout. An internal v2 run was completed after
+freezing commit `4448641`; raw reports and freeze/completion hashes are in
+`docs/reports/`. See [evaluation log](EVALUATION_LOG.md) and
+[measured results](BUILD_VERIFICATION.md). The final was available in the working
+tree and is not independent or blind. Future tuning requires a new reserved test.
 
 The benchmark checks transfer before correction and adaptation after feedback.
 It does not establish a production model, regulatory compliance, or semantic

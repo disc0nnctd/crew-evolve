@@ -6,9 +6,9 @@ from reported comparison metrics and claims; the review informed protocol
 repairs. Its manifest is retained at
 `benchmarks/adaptation/history/manifest-v1-retired.json`.
 
-Those families are retired. The checked-in manifest contains a fresh v2 final
-holdout with new names, seeds, headers, and encodings. It has not been run.
-The final command requires its explicit unlock, version, confirmation, and
-manifest-hash arguments; no authorized run has occurred. The v2 process is an
-internal reserved protocol, not a sealed independent research test. See the detailed benchmark log at
-`benchmarks/adaptation/EVALUATION_LOG.md`.
+Those families are retired. After protocol review, commit `4448641` and the v2
+manifest were frozen and both methods ran once on the internal final split.
+Results, including missed targets, are retained under `docs/reports/`; the
+frozen sources were verified unchanged after evaluation. This was not a sealed,
+blind, or independent test. See the detailed
+[benchmark log](../benchmarks/adaptation/EVALUATION_LOG.md).
