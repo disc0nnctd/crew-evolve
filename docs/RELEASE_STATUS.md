@@ -6,6 +6,11 @@ has been published. The release roadmap is in [RELEASE_PLAN.md](RELEASE_PLAN.md)
 that roadmap's research and performance targets are not implied by shipping
 these features.
 
+[Verification and measured limits](BUILD_VERIFICATION.md) records passing
+functional/install checks and the completed synthetic/load evaluations. The
+internal import-coverage goal and changing-duty latency goal were missed;
+these remain development targets rather than release claims.
+
 ## Implemented
 
 | Capability | What is inspectable |

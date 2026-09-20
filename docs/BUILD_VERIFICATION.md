@@ -86,9 +86,49 @@ against this result.
 
 ## Scaling measurements
 
-The full-request load measurement and its limitations will be recorded here
-with the raw report after completion. The harness uses structured requests;
-it does not measure natural-language interpretation or model inference.
+[Recorded report](reports/load-10000.json): 10,000 crew, 50,000 assignments,
+50,064 duties, and 1,000 requests for each of four scenarios. Rotating queries
+cycle 32 duties, exceeding the 16-result cache. The engine snapshot is retained;
+the result cache is reset before each scenario. Hardware: Intel(R) Core(TM) Ultra 7 155H,
+22 reported logical CPUs, Linux x86_64, CPython 3.12.3. This is one development
+machine run, not a hardware-independent guarantee.
+
+| Clients | Query pattern | Median ms | p95 ms | p99 ms | Requests/sec | Cache hits | Errors |
+| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | rotating | 353.18 | 618.80 | 656.99 | 2.49 | 0.0% | 0 |
+| 1 | repeated | 8.18 | 11.77 | 13.98 | 109.77 | 99.9% | 0 |
+| 4 | rotating | 1934.68 | 2340.06 | 2580.95 | 2.04 | 0.0% | 0 |
+| 4 | repeated | 37.06 | 61.64 | 103.90 | 80.69 | 99.6% | 0 |
+
+Cold initialization took 2847.11 ms.
+The first query after an assignment took 2980.34 ms,
+returned the new revision, and missed the old cache as expected. The stale
+assignment attempt was rejected. Both the small reference oracle and sampled
+HTTP response checks passed. All 4,000 warm requests completed without errors.
+
+The process memory high-water mark was 442.27 MiB;
+143.41 MiB was already reached during seeding.
+This includes the server, load client, synthetic data, engine copies, and
+correctness checks in one process; it is not isolated server memory. The
+collector keeps only three complete response samples per scenario. An earlier
+run retained every response, was stopped, and is excluded from these metrics.
+
+**Changing-duty queries missed the proposed 200 ms p95 target.** Cached replies
+meet that number in this run, but do not demonstrate the general scaling goal.
+The harness measures structured local HTTP requests, excluding language/model
+interpretation, imports, GUI rendering, and distributed networking. The large
+workload is seeded directly and exceeds the single-file duty import limit;
+this is an engine/API workload, not proof of an interactive import at that size.
+Large response samples use direct indexed shaping, while the independent
+reference oracle is bounded to 96 crew. Model calls are zero by construction,
+not evidence of model-call savings over a competing assistant.
+
+Reproduce from the checkout:
+
+```bash
+python3 scripts/load_benchmark.py --crew 10000 --history 5 --requests 1000 \
+  --clients 1,4 --output artifacts/load-10000.json
+```
 
 ## Review record
 
