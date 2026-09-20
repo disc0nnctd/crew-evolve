@@ -1,0 +1,184 @@
+{
+  "budgets": [
+    0,
+    1,
+    5,
+    10,
+    20
+  ],
+  "description": "Source-format adaptation benchmark; labels are outside model input.",
+  "families": [
+    {
+      "files": {
+        "assignments.csv": "e8a9df4000092f5715009ec9dfd71395ae2d4e660fa87a0cfafcd8dd8b3f15ce",
+        "crew.csv": "7afdd9192a45181d3ae612b3bb8437d6344e128b140e3ba17e06850873ac4b77",
+        "duties.csv": "19cb86622c26e06c2686c702b5030653410dc72cc0c6e01dcfc1946565a5b76c"
+      },
+      "labels": "labels/train_01_canonical.json",
+      "labels_sha256": "f137317b69a394c4a820da09cf5843af25908b2ecc2d275612a6ad3a3abae2c6",
+      "name": "train_01_canonical",
+      "seed": 101,
+      "split": "train",
+      "style": "canonical"
+    },
+    {
+      "files": {
+        "assignments.csv": "febe648fbdaa39c7cb1310218cbc380eaaec4b161cb8113303bf58a29c332fc6",
+        "crew.csv": "6f552bf116f290b5ad566eb0c11c4438a1d2f4550edd4fec42d8a8f3f5cf1aa6",
+        "duties.csv": "365eb8bd53ff4cab3304c396d24c0209109210b9611d29959c541331c09511ad"
+      },
+      "labels": "labels/train_02_aliases.json",
+      "labels_sha256": "60e84e5a8a65fe0acba93a229721a2b93024312618327a99bea2a2634fbe80ef",
+      "name": "train_02_aliases",
+      "seed": 203,
+      "split": "train",
+      "style": "aliases"
+    },
+    {
+      "files": {
+        "assignments.csv": "16f836a167e572d1370d4f6a8aff03fc7fe8669290b50baa205731c6159ab62d",
+        "crew.csv": "17325c5da0ca6d54585a9084a9d6857d2b08a7e59187c8f68d1d5e991afdf659",
+        "duties.csv": "5cbdee0774813fd41c2ac3f2e337e788b6b9990a5f7f917324264163b67bd04c"
+      },
+      "labels": "labels/train_03_cannot_work.json",
+      "labels_sha256": "aaf2135f7d1f80c2a254d971a63733d37eff86eff85a2db99d6926123ea3c670",
+      "name": "train_03_cannot_work",
+      "seed": 307,
+      "split": "train",
+      "style": "cannot_work"
+    },
+    {
+      "files": {
+        "assignments.csv": "dd08c6cf318071c0ed5686062ac8646a2695a59269fc572137adf1db0262d231",
+        "crew.csv": "74062a197feaef893ac2756d4d7cd8bd1580e5e0831bcc614ea46c9396177b8a",
+        "duties.csv": "93c60e2344e3243351ca722492dac58a3ef0c3907e08afba4d3d5d0f8c1a518a"
+      },
+      "labels": "labels/train_04_enum.json",
+      "labels_sha256": "1fc837985eb576cc5121062754659a4e5263ffb8c4b9f08aa73158fc97162639",
+      "name": "train_04_enum",
+      "seed": 401,
+      "split": "train",
+      "style": "enum"
+    },
+    {
+      "files": {
+        "assignments.csv": "3464b62b76aa17fa3bebfd825987e48ce45868f61e6a542bbd3df889f6aa9750",
+        "crew.csv": "bde50fb842c141d1d8295d3e89a9662815c250cdf56f81589921acd4f14d967d",
+        "duties.csv": "65f92ca14cc5c649f58fc614d3f5a5b1fd7c6f33039aa9fc18e67b654146466a"
+      },
+      "labels": "labels/train_05_eu_dates.json",
+      "labels_sha256": "7142190d981836362ecdb357b79c3e3131de7075020790e43cda8ca9af91614d",
+      "name": "train_05_eu_dates",
+      "seed": 509,
+      "split": "train",
+      "style": "eu_dates"
+    },
+    {
+      "files": {
+        "assignments.csv": "f6be25cb043daca328572ce727f7fee4255f5ebf043c49b1f3f7a5c758b0f04f",
+        "crew.csv": "5472c9bb203d32f6aa79a4218152232c34827668f8e264c67c40462d5f236825",
+        "duties.csv": "60f4d62fee9f2a53c40d1bf83a144360ea91cf3897082a48d8ec54816b709083"
+      },
+      "labels": "labels/train_06_faults.json",
+      "labels_sha256": "195bf27e9f3d51f39e55270384d37ec0b8c269741137586daae807b8ed688d18",
+      "name": "train_06_faults",
+      "seed": 601,
+      "split": "train",
+      "style": "canonical_faults"
+    },
+    {
+      "files": {
+        "assignments.csv": "4063082e168d10a4e140c602c53b424eeac46b7257b4a955d3fdc299c5365d24",
+        "crew.csv": "7d6e029ca2273740078183cb07807483fbf81c15d98fb4ac0bb50cef53399213",
+        "duties.csv": "3e9b4710a76801a1fd1a169813d20b9a6fd14d304de0820ea4a6231ac937de20"
+      },
+      "labels": "labels/development_01_polarity.json",
+      "labels_sha256": "b245a79beb37ea7a00ab63bb9f3113808efb51a7778167fba21d8f4563de63e1",
+      "name": "development_01_polarity",
+      "seed": 701,
+      "split": "development",
+      "style": "polarity"
+    },
+    {
+      "files": {
+        "assignments.csv": "987ee8eb733726bf76f663464df6779c9ee8addd2b4180f224cff4ee2c3b4945",
+        "crew.csv": "835715ffd490d857b1a52d4ae48d336ce3b4951ea82957c9091f0d48468b2c73",
+        "duties.csv": "0c3e3c7db9d0cd961cc641aac474328f154d4e7572d163a52aebd30c60b3716e"
+      },
+      "labels": "labels/development_02_enum_dates.json",
+      "labels_sha256": "4c900f42875365fa195da6d4d2ec3c4f642e263419aae9db5f1c31f8801e1c94",
+      "name": "development_02_enum_dates",
+      "seed": 809,
+      "split": "development",
+      "style": "enum_dates"
+    },
+    {
+      "files": {
+        "assignments.csv": "be89055051031deb86b47a07413c256f18ffe1112f2b2a8d3d0ec27d31098518",
+        "crew.csv": "7e1027708635e82deb6d8db5a3ae1d4f5168431860a3812aef7a9716a0b94aaa",
+        "duties.csv": "a0d92533c0bcf111cefe56f341b689b8422c27fef469aa02caf7914851868133"
+      },
+      "labels": "labels/development_03_faults.json",
+      "labels_sha256": "764daa11ca2dd0ed6ed9b686c51c6e3fd28cab9d02ff354b0c9bfa2bb17fdb95",
+      "name": "development_03_faults",
+      "seed": 907,
+      "split": "development",
+      "style": "faults"
+    },
+    {
+      "files": {
+        "assignments.csv": "21d77eacfb2ad73b742d0a108b188b4248832f28194545c499e3fd9466de6320",
+        "crew.csv": "3fcabce51b723d059e5afda3c52751a7eb458981aca959bedd36d6fbc4a12a87",
+        "duties.csv": "fa9256a24b94f7dbf9dd3c3941b8cc251ff713825189eff6deebfd5fd614e0c3"
+      },
+      "labels": "labels/final_01_combined.json",
+      "labels_sha256": "1fd59789c516991dfc7c012a7cb5b3b2d4e2562935e72dc30cc6c0328afa15fd",
+      "name": "final_01_combined",
+      "seed": 1009,
+      "split": "final",
+      "style": "combined"
+    },
+    {
+      "files": {
+        "assignments.csv": "6f7ffd60b48ee074900acd1f4467c1241994c158fe569a5d2a46f5d821f1e137",
+        "crew.csv": "d8fd62e7c36df373bece1627d264dd6c55d59f949f01ec6105611e51017552b9",
+        "duties.csv": "252a0721e8a49f01662bc203470a70ade70f9266f4a65d9fe2e33454f700bfde"
+      },
+      "labels": "labels/final_02_unavailable.json",
+      "labels_sha256": "3c4d0e64f97da810d478a94d23541985426299958737b988339d6a0a7f54372b",
+      "name": "final_02_unavailable",
+      "seed": 1103,
+      "split": "final",
+      "style": "unavailable"
+    },
+    {
+      "files": {
+        "assignments.csv": "7bc41ac7a7fd4bd8f1827cf71858cbd47f49183637928b5f91d86dc0582861ed",
+        "crew.csv": "17a4166e303173d7faef2aff13efbe3dbe98638ed93ec7b8aa8b47a0ac99a5f2",
+        "duties.csv": "02d63220507a73d0df44c8ba5ef7bbb7aadaf1752483e82de6961f041c0d2283"
+      },
+      "labels": "labels/final_03_contradictions.json",
+      "labels_sha256": "8257c4b965eec29bc58abd7808eaeaaf5489b78f6c30070bcff1708ac59f6172",
+      "name": "final_03_contradictions",
+      "seed": 1201,
+      "split": "final",
+      "style": "contradictions"
+    }
+  ],
+  "final_status": "reserved; no final evaluation included",
+  "labels_are_model_input": false,
+  "protocol_version": "1.0",
+  "schema_version": "adaptation-v1",
+  "seeds": [
+    11,
+    23,
+    37,
+    41,
+    53
+  ],
+  "splits": {
+    "development": 3,
+    "final": 3,
+    "train": 6
+  }
+}

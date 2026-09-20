@@ -66,6 +66,8 @@ def main():
                 mappings = {'Badge':'crew_id','Person':'name','Home station':'base','Position':'role','Fleet types':'aircraft','On call':'available'}
                 for label, field in mappings.items():
                     page.get_by_label(label, exact=True).select_option(field)
+                page.get_by_role('button', name='Test preview').click()
+                expect(page.locator('#transform-status')).to_contain_text('Preview passed')
                 page.get_by_role('button', name='Accept mapping and replace crew').click()
                 expect(page.locator('#notice')).to_contain_text('Table imported')
                 page.get_by_role('button', name='Inspect file').click()

@@ -1,0 +1,2730 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "accepted": true
+      },
+      "id": "valid",
+      "kind": "all"
+    },
+    {
+      "expected": {
+        "accepted": true
+      },
+      "id": "valid_replay",
+      "kind": "all"
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 1",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F01",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_01",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 1"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F01"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 2",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-05T14:00:00+00:00",
+              "report_at": "2026-10-05T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_02",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 2"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-05T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-05T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 3",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_03",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 3"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F04",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F04",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 4",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_04",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 4"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F04"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F04"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 5",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F05",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_05",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 5"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F05"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 6",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-09T14:00:00+00:00",
+              "report_at": "2026-10-09T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_06",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 6"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-09T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-09T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 7",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_07",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 7"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F08",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F08",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 8",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_08",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 8"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F08"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F08"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 9",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F09",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_09",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 9"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F09"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 10",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-13T14:00:00+00:00",
+              "report_at": "2026-10-13T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_10",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 10"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-13T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-13T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 11",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_11",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 11"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F12",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F12",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 12",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_12",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 12"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F12"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F12"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 13",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F13",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_13",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 13"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F13"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 14",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-17T14:00:00+00:00",
+              "report_at": "2026-10-17T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_14",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 14"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-17T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-17T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 15",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_15",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 15"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F16",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F16",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 16",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_16",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 16"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F16"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F16"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 17",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F17",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_17",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 17"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F17"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 18",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-21T14:00:00+00:00",
+              "report_at": "2026-10-21T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_18",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 18"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-21T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-21T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 19",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_19",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 19"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F20",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F20",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 20",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_20",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 20"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F20"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F20"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 21",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-F21",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_21",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 21"
+          },
+          {
+            "field": "Pairing",
+            "kind": "duties",
+            "row": 1,
+            "value": "D-307-F21"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 22",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-25T14:00:00+00:00",
+              "report_at": "2026-10-25T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_22",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 22"
+          },
+          {
+            "field": "Report UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-25T06:00:00Z"
+          },
+          {
+            "field": "Release UTC",
+            "kind": "duties",
+            "row": 1,
+            "value": "2026-10-25T14:00:00Z"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 23",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_23",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 23"
+          },
+          {
+            "field": "Cannot work",
+            "kind": "crew",
+            "row": 2,
+            "value": "false"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-F24",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-F24",
+              "name": "Asha Rao",
+              "role": "captain"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Scenario 24",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "future_values_24",
+      "kind": "all",
+      "mutation": {
+        "changes": [
+          {
+            "field": "Person",
+            "kind": "crew",
+            "row": 1,
+            "value": "Scenario 24"
+          },
+          {
+            "field": "Badge",
+            "kind": "crew",
+            "row": 0,
+            "value": "C-307-F24"
+          },
+          {
+            "field": "Badge",
+            "kind": "assignments",
+            "row": 0,
+            "value": "C-307-F24"
+          }
+        ]
+      },
+      "scenario": true
+    },
+    {
+      "expected": {
+        "accepted": false,
+        "allowed_reasons": [
+          "missing",
+          "invalid_boolean"
+        ],
+        "reason": "missing"
+      },
+      "id": "missing_value",
+      "kind": "crew",
+      "mutation": {
+        "field": "Cannot work",
+        "row": 1,
+        "value": ""
+      }
+    },
+    {
+      "expected": {
+        "accepted": false,
+        "reason": "duplicate"
+      },
+      "id": "duplicate_identifier",
+      "kind": "crew",
+      "mutation": {
+        "duplicate_row": 0
+      }
+    },
+    {
+      "expected": {
+        "accepted": false,
+        "reason": "contradiction"
+      },
+      "id": "contradictory_assignment",
+      "kind": "assignments",
+      "mutation": {
+        "field": "Position",
+        "row": 1,
+        "value": "captain"
+      }
+    },
+    {
+      "expected": {
+        "accepted": true,
+        "records": {
+          "assignments": [
+            {
+              "crew_id": "C-307-01",
+              "duty_id": "D-307-01",
+              "role": "captain"
+            },
+            {
+              "crew_id": "C-307-02",
+              "duty_id": "D-307-01",
+              "role": "first_officer"
+            }
+          ],
+          "crew": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-01",
+              "name": "Asha Rao",
+              "role": "unknown_role"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": true,
+              "base": "DEL",
+              "crew_id": "C-307-02",
+              "name": "Noor Khan",
+              "role": "first_officer"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "available": false,
+              "base": "BOM",
+              "crew_id": "C-307-03",
+              "name": "Mira Sen",
+              "role": "captain"
+            }
+          ],
+          "duties": [
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-01",
+              "end_base": "DEL",
+              "release_at": "2026-10-02T14:00:00+00:00",
+              "report_at": "2026-10-02T06:00:00+00:00",
+              "required_roles": [
+                "captain",
+                "first_officer"
+              ],
+              "start_base": "DEL"
+            },
+            {
+              "aircraft": [
+                "A320"
+              ],
+              "duty_id": "D-307-02",
+              "end_base": "DEL",
+              "release_at": "2026-10-03T14:00:00+00:00",
+              "report_at": "2026-10-03T06:00:00+00:00",
+              "required_roles": [
+                "captain"
+              ],
+              "start_base": "DEL"
+            }
+          ]
+        }
+      },
+      "id": "unknown_enum",
+      "kind": "crew",
+      "mutation": {
+        "field": "Position",
+        "row": 0,
+        "value": "UNKNOWN_ROLE"
+      }
+    }
+  ],
+  "expected": {
+    "availability": {
+      "C-307-01": true,
+      "C-307-02": true,
+      "C-307-03": false
+    },
+    "coverage": {
+      "duty_id": "D-307-01",
+      "eligible": [
+        "C-307-01"
+      ],
+      "role": "captain"
+    },
+    "valid": {
+      "accepted": true,
+      "records": {
+        "assignments": [
+          {
+            "crew_id": "C-307-01",
+            "duty_id": "D-307-01",
+            "role": "captain"
+          },
+          {
+            "crew_id": "C-307-02",
+            "duty_id": "D-307-01",
+            "role": "first_officer"
+          }
+        ],
+        "crew": [
+          {
+            "aircraft": [
+              "A320"
+            ],
+            "available": true,
+            "base": "DEL",
+            "crew_id": "C-307-01",
+            "name": "Asha Rao",
+            "role": "captain"
+          },
+          {
+            "aircraft": [
+              "A320"
+            ],
+            "available": true,
+            "base": "DEL",
+            "crew_id": "C-307-02",
+            "name": "Noor Khan",
+            "role": "first_officer"
+          },
+          {
+            "aircraft": [
+              "A320"
+            ],
+            "available": false,
+            "base": "BOM",
+            "crew_id": "C-307-03",
+            "name": "Mira Sen",
+            "role": "captain"
+          }
+        ],
+        "duties": [
+          {
+            "aircraft": [
+              "A320"
+            ],
+            "duty_id": "D-307-01",
+            "end_base": "DEL",
+            "release_at": "2026-10-02T14:00:00+00:00",
+            "report_at": "2026-10-02T06:00:00+00:00",
+            "required_roles": [
+              "captain",
+              "first_officer"
+            ],
+            "start_base": "DEL"
+          },
+          {
+            "aircraft": [
+              "A320"
+            ],
+            "duty_id": "D-307-02",
+            "end_base": "DEL",
+            "release_at": "2026-10-03T14:00:00+00:00",
+            "report_at": "2026-10-03T06:00:00+00:00",
+            "required_roles": [
+              "captain"
+            ],
+            "start_base": "DEL"
+          }
+        ]
+      },
+      "relationships": {
+        "assignments": 2,
+        "crew": 3,
+        "duties": 2
+      }
+    }
+  },
+  "family": "train_03_cannot_work",
+  "mapping": {
+    "assignments": {
+      "Badge": "crew_id",
+      "Pairing": "duty_id",
+      "Position": "role"
+    },
+    "crew": {
+      "Badge": "crew_id",
+      "Cannot work": "available",
+      "Fleet types": "aircraft",
+      "Home station": "base",
+      "Person": "name",
+      "Position": "role"
+    },
+    "duties": {
+      "Aircraft type": "aircraft",
+      "Crew required": "required_roles",
+      "From": "start_base",
+      "Pairing": "duty_id",
+      "Release UTC": "release_at",
+      "Report UTC": "report_at",
+      "To": "end_base"
+    }
+  },
+  "schema_version": "adaptation-v2",
+  "seed": 307,
+  "source_contract": "train_03_cannot_work:v2",
+  "split": "train",
+  "transforms": {
+    "assignments": {},
+    "crew": {
+      "Cannot work": {
+        "invert": true,
+        "op": "boolean"
+      }
+    },
+    "duties": {}
+  }
+}

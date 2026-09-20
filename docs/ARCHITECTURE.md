@@ -2,49 +2,92 @@
 
 ```mermaid
 flowchart LR
-    Files[Imported tables] --> Preview[Profile and propose field mapping]
-    Model[Configured model] -. suggestion only .-> Preview
-    Preview --> Review[Operator review]
-    Review --> Store[(SQLite: original + normalized data)]
-    Review --> Learn[Correction replay]
-    Learn --> Config[Versioned aliases and workflows]
-    Question[Operator question] --> Route[Learned route or model proposal]
-    Config --> Route
+    Files[Imported tables] --> Preview[Parse and preview]
+    Preview --> Review[Operator mapping and source scope]
+    Review --> Test[Test normalized records]
+    Test --> Store[(SQLite workspace)]
+    Store --> Contract[Versioned source contract]
+    Contract --> Reuse[Future import reuse]
+    Question[Operator question] --> Guard[Bounded request checks]
+    Reuse --> Guard
+    Guard --> Route[Approved phrase or optional model proposal]
     Route --> Engine[Deterministic crew checks]
     Store --> Engine
     Policy[Human-activated policy] --> Engine
-    Engine --> Result[Answer + checks + source records]
-    Algorithms[Reviewed algorithm catalog] --> Bench[Reference equality + holdout + timing]
-    Bench --> Strategy[Selected implementation]
-    Strategy --> Engine
+    Engine --> Result[Answer, reasons, source records]
+    Catalog[Reviewed algorithm catalog] --> Gate[Equality and held-out checks]
+    Gate --> Engine
 ```
 
-The model interprets a request or proposes a mapping. It does not generate executable code, perform operational arithmetic, or commit mutations. Its question plan is restricted to coverage, roster, summary, or clarification. The application generates the final factual response from the selected operation.
+The local HTTP server, browser, and application share one SQLite workspace.
+The server binds to loopback, limits request bodies, checks the browser origin,
+and gives each workspace process a token for writes. Built distributions carry
+the web files and examples; a checkout uses the same resource lookup with a
+source-tree fallback.
 
-## Three improvement loops
+## Interpretation and learning
 
-**Data and workflow learning:** observe an accepted mapping or explicit correction, produce a candidate configuration, replay all saved cases, reject any failure, activate passing configuration, retain before/after states. Only the most recent active learning change can be rolled back. Learned mappings affect future imports. They do not retroactively transform existing records.
+An import is parsed, staged, and shown for review. A named source contract binds
+an exact table kind, ordered headers, field mapping, and a closed transform
+vocabulary. Supported transforms are identity, explicit boolean conversion and
+inversion, explicit enum values, and datetime parsing with a declared format
+and timezone. The **Test preview** operation applies the candidate to copied
+raw rows before the table can be replaced.
 
-**Planning-policy improvement:** draft supported parameters, validate ranges, compare all crew-position results within the interactive check limit, show changed outcomes and newly failing existing assignments, wait for operator activation. A workspace revision change makes the comparison stale. The operator can restore an earlier policy by proposing its former values and comparing them against the current data.
+Accepted contracts are scoped by source name and exact columns. Their evidence
+keeps at most 128 reviewed imports for one scope and at most 32 diverse rows
+from each import. This is bounded replay evidence for a reviewed meaning, not
+an accuracy estimate for unseen exports. A failed replay remains recorded as a
+rejection. A later version can be rolled back; imported datasets and their raw
+records remain unchanged, while future reuse returns to the prior contract.
 
-**Algorithm improvement:** evaluate the reviewed catalog on seeded synthetic workloads, require full output equality with a separate reference path and held-out workloads, measure cold response time and allocation peaks, choose the lowest geometric-mean p95 strategy. The selected strategy changes implementation, not policy. Arbitrary generated algorithms are a future review/sandboxing problem, not an existing feature.
+Question routing has a separate boundary. The request guard rejects writes,
+missing or ambiguous targets, prompt-like instructions, and mixed operations.
+Approved workflow phrases use bounded matching for coverage, roster, and
+summary. They do not perform semantic training. An optional local model can
+rank approved examples from cached files, but its candidate still needs review
+and the operations engine remains authoritative.
+
+## Operational decisions
+
+The engine receives normalized crew, duty, and assignment records. It checks
+availability, role, recorded fleet qualification, duty duration, rest,
+overlap, location continuity, assignments, and rolling seven-day hours. It
+returns candidate reasons and source references; it does not infer missing
+flight legs or regulatory rules.
+
+Policy edits are proposals. The application compares the current and proposed
+outcomes, records the report, and waits for explicit activation. Assignment
+writes use an immediate transaction and recheck both workspace revision and
+crew eligibility before committing. A stale revision is rejected.
+
+`Engine` builds a defensive indexed snapshot for one workspace revision and
+strategy. The application keeps a small versioned snapshot cache and a bounded
+query-result cache; data, policy, assignment, or strategy changes advance the
+revision and make prior answers ineligible. The reference strategy remains an
+oracle for reviewed algorithm comparisons.
 
 ## Modules
 
 | Module | Responsibility |
 | --- | --- |
-| data.py | File parsing, alias proposals, normalization, row validation |
-| store.py | Transactions, source retention, revisions, learning evidence, audit events |
-| engine.py | Crew candidate checks, roster, policy comparisons, reference and indexed strategies |
-| learning.py | Correction replay, promotion, conflict rejection, rollback |
-| optimize.py | Algorithm catalog, seeded workloads, scores, held-out equality checks |
-| model.py | Bounded model requests and response parsing |
-| app.py | Use cases, read snapshots, revision checks, bounded cache, benchmark activation |
-| server.py | Local HTTP service, body limits, origin checks, workspace token |
-| web/ | Accessible browser interface; no network assets or frontend build |
+| `data.py` | CSV/TSV/JSON parsing, aliases, normalization, and row validation |
+| `contracts.py` | Closed, declarative source transforms and fingerprints |
+| `contract_learning.py` | Scoped evidence, replay, versioning, rejection, and promotion |
+| `workflows.py` | Bounded approved phrase routing and request guards |
+| `local_model.py` | Opt-in cached local candidate retrieval |
+| `store.py` | SQLite transactions, source retention, revisions, and audit events |
+| `workspace.py` | Validated private workspace backup and restore |
+| `engine.py` | Crew checks, roster, policies, and reference/indexed strategies |
+| `learning.py` | Existing workflow and mapping history with rollback |
+| `optimize.py` | Reviewed algorithm comparison and correctness gates |
+| `app.py` | Use cases, preview/test/accept flow, routing, and caches |
+| `server.py` | Local HTTP service and browser API |
+| `resources.py` | Installed asset lookup with checkout fallback |
+| `web/` | Self-contained browser interface |
 
-Assignment writes use `BEGIN IMMEDIATE` and recheck the supplied revision and crew eligibility in the same transaction. Concurrent requests cannot fill the same stale position. Cached answers are keyed by revision and copied before returning. Reads use a consistent database snapshot.
-
-## Design
-
-The interface uses shared CSS tokens for color, spacing surfaces, type, and controls. Navy navigation, a light operations surface, blue actions, and text-labelled green/amber/red states distinguish navigation from operational results. System fonts keep it self-contained. Tables scroll inside their panels on narrow screens; focus indicators, labelled inputs, status announcements, and reduced-motion support are built in.
+The adaptation and load protocols are documented in
+[ADAPTATION.md](ADAPTATION.md) and [LOAD_BENCHMARK.md](LOAD_BENCHMARK.md).
+Their measurements remain under review; they do not establish production
+targets, semantic understanding, regulatory compliance, or independent human
+trial results. The repository is private and has no selected license.

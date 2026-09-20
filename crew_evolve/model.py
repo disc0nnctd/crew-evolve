@@ -14,6 +14,14 @@ class ModelError(RuntimeError):
     pass
 
 
+def configured_model():
+    """Keep local inference opt-in; importing the application loads no weights."""
+    if os.environ.get("CREW_LOCAL_MODEL", "").strip():
+        from .local_model import LocalModel
+        return LocalModel()
+    return Model()
+
+
 class Model:
     def __init__(self):
         self.base_url = os.environ.get("CREW_MODEL_URL", "").rstrip("/")

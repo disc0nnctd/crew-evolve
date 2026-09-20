@@ -1,0 +1,3 @@
+duty_id,report_at,release_at,start_base,end_base,aircraft,required_roles
+D-601-01,2026-10-07T06:00:00Z,2026-10-07T14:00:00Z,DEL,DEL,A320,captain|first_officer
+D-601-02,2026-10-08T06:00:00Z,2026-10-08T14:00:00Z,DEL,DEL,A320,captain

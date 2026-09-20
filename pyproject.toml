@@ -1,9 +1,25 @@
 [project]
 name = "crew-evolve"
-version = "0.1.0"
+version = "0.2.0rc1"
 description = "A crew management assistant with inspectable, tested learning from corrections."
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+local = [
+    "sentence-transformers>=5.4,<6; python_version >= '3.11'",
+    "scikit-learn>=1.8,<2; python_version >= '3.11'",
+]
+
 [project.scripts]
 crew-evolve = "crew_evolve.server:main"
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["crew_evolve*"]
