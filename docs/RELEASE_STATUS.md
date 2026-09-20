@@ -11,6 +11,10 @@ functional/install checks and the completed synthetic/load evaluations. The
 internal import-coverage goal and changing-duty latency goal were missed;
 these remain development targets rather than release claims.
 
+The [changing-duty follow-up](PERFORMANCE_FOLLOWUP.md) records a tested indexed
+engine improvement, stronger reference checks, and a shorter concurrent web
+load run. Its changing-duty latency still misses the target.
+
 ## Implemented
 
 | Capability | What is inspectable |

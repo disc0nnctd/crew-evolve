@@ -1,0 +1,38 @@
+{
+  "scope": "Changing-duty performance follow-up; no adaptation final re-evaluation or model experiment",
+  "unit_tests": {
+    "command": "python3 -m unittest discover -q",
+    "run": 141,
+    "passed": 140,
+    "skipped": 1,
+    "failed": 0,
+    "seconds": 18.502,
+    "skip_note": "Optional cached-model integration test"
+  },
+  "load": {
+    "command": "python3 scripts/load_benchmark.py --crew 10000 --history 5 --requests 100 --clients 1,4 --output artifacts/load-10000-followup.json",
+    "warm_requests": 400,
+    "errors": 0,
+    "independent_small_reference_passed": true,
+    "large_http_samples_passed": true,
+    "stale_write_and_snapshot_invalidation_passed": true,
+    "p95_200ms_changing_duty_goal_met": false
+  },
+  "full_before_after_result_hashes_equal": true,
+  "review": {
+    "implementation": "gpt-5.6-luna",
+    "review": "gpt-5.6-terra",
+    "verdict": "No remaining blocker; bounded profile and cold samples must not become production claims"
+  },
+  "artifacts_sha256": {
+    "query-profile-before.json": "014e0329d3f6b8a532bff397b394cc0b89455d2e143bffd45917ce9cb7398693",
+    "query-profile-after.json": "2773bd26b083a319d941e976fa55e79e100c1654afb136e0db7217285b99edf0",
+    "load-10000-followup.json": "4a3e466df1bfc7a46bdd58df2306e08295415b3da0ea0665f45769e12cd4839d"
+  },
+  "prior_checks_not_rerun": [
+    "browser walkthrough",
+    "wheel/source install browser checks",
+    "optional actual local-model inference",
+    "frozen adaptation final"
+  ]
+}

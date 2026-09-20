@@ -29,14 +29,30 @@ class SnapshotCacheTests(unittest.TestCase):
         with self.store.connect() as db:
             datasets = self.store.datasets(db)
             policy = self.store.get(db, "policy")
-            strategy = self.store.get(db, "strategy")
-        expected = Engine(datasets, policy, strategy).coverage(plan["duty_id"], plan["role"])
+        expected = Engine(datasets, policy, "reference").coverage(plan["duty_id"], plan["role"])
         for key, value in expected.items():
             self.assertEqual(answer["result"][key], value, key)
 
     def assert_stale_revision(self, revision):
         with self.assertRaisesRegex(ValueError, "workspace changed"):
             self.app.assign("C-01", "D-101", "captain", revision)
+
+    def test_reference_check_detects_corrupt_indexed_results(self):
+        with self.store.connect() as db:
+            self.store.put(db, "strategy", "indexed")
+            self.store.bump(db)
+        original = Engine.coverage
+
+        def corrupted(engine, *args, **kwargs):
+            answer = original(engine, *args, **kwargs)
+            if engine.strategy == "indexed":
+                answer["passing"] += 1
+            return answer
+
+        with patch.object(Engine, "coverage", corrupted):
+            answer = self.coverage()
+            with self.assertRaises(AssertionError):
+                self.assert_matches_reference(answer)
 
     def test_import_replacement_invalidates_engine_and_rejects_old_revision(self):
         before = self.coverage()
@@ -149,6 +165,7 @@ class SnapshotCacheTests(unittest.TestCase):
         self.assertEqual(set(engine.by_slot), slot_keys)
         self.assertEqual(set(engine._indexed_history), crew_keys)
         self.assertEqual(set(engine._indexed_sweeps), crew_keys)
+        self.assertEqual(set(engine._indexed_bounds), crew_keys)
 
 
 if __name__ == "__main__":

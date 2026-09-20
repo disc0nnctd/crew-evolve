@@ -78,11 +78,26 @@ class Engine:
         self.crew = {r["crew_id"]: r for r in self.datasets.get("crew", {}).get("records", [])}
         self.duties = {r["duty_id"]: r for r in self.datasets.get("duties", {}).get("records", [])}
         self.assignments = self.datasets.get("assignments", {}).get("records", [])
+        self._integrity_issues = None
         self.by_crew, self.by_slot = {}, {}
         self._duty_times = {}
         self._indexed_history = {}
         self._indexed_sweeps = {}
+        self._indexed_bounds = {}
         if strategy == "indexed":
+            self._source_defaults = {
+                kind: dataset.get("source", "workspace")
+                for kind, dataset in self.datasets.items()
+                if isinstance(dataset, dict)
+            }
+            issues = []
+            for a in self.assignments:
+                c, d = self.crew.get(a["crew_id"]), self.duties.get(a["duty_id"])
+                if c is None or d is None:
+                    issues.append(f"Assignment references missing crew or duty: {a['crew_id']} / {a['duty_id']}.")
+                elif a["role"] != c["role"] or a["role"] not in d["required_roles"]:
+                    issues.append(f"Assignment role mismatch: {a['crew_id']} / {a['duty_id']}.")
+            self._integrity_issues = tuple(issues)
             for a in self.assignments:
                 crew_assignments = self.by_crew.setdefault(a["crew_id"], [])
                 crew_assignments.append(a)
@@ -105,6 +120,10 @@ class Engine:
                     start, end = self._duty_times[duty["duty_id"]]
                     history.append((duty, start, end))
                 self._indexed_history[crew_id] = tuple(history)
+                self._indexed_bounds[crew_id] = (
+                    min(start for _, start, _ in history),
+                    max(end for _, _, end in history),
+                ) if history else None
                 self._indexed_sweeps[crew_id] = self._build_sweep(
                     (start, end) for _, start, end in history
                 )
@@ -144,6 +163,10 @@ class Engine:
         if not sweep or not sweep[0]:
             # A rolling seven-day window clips even a target with no history.
             return max(0, min(hours(target_start, target_end), _WEEK.total_seconds() / 3600))
+        bounds = self._indexed_bounds.get(crew_id)
+        if bounds and (target_start - bounds[1] >= _WEEK or
+                       bounds[0] - target_end >= _WEEK):
+            return max(0, min(hours(target_start, target_end), _WEEK.total_seconds() / 3600))
         endpoints = (*sweep[3], target_end, target_start + _WEEK)
         peak = 0.0
         for point in endpoints:
@@ -160,6 +183,8 @@ class Engine:
         return peak
 
     def integrity(self):
+        if self._integrity_issues is not None:
+            return list(self._integrity_issues)
         issues = []
         for a in self.assignments:
             c, d = self.crew.get(a["crew_id"]), self.duties.get(a["duty_id"])
@@ -170,7 +195,11 @@ class Engine:
         return issues
 
     def source(self, kind, record):
-        return {"file": record.get("_source", self.datasets.get(kind, {}).get("source", "workspace")),
+        if self.strategy == "indexed":
+            source = record.get("_source", self._source_defaults.get(kind, "workspace"))
+        else:
+            source = record.get("_source", self.datasets.get(kind, {}).get("source", "workspace"))
+        return {"file": source,
                 "record": record.get("_record"), "kind": kind}
 
     def check(self, crew_id, duty_id, role, existing=False):

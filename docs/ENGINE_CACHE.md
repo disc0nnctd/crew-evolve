@@ -15,3 +15,8 @@ The following is a same-workload local measurement on 2026-09-20. Each row uses 
 | 1500 | 64.419 | 105.491 | 61.539 | 34.854 |
 
 The extra cold construction work buys reusable state. On the repeated workload, warm coverage latency fell from 3.294 to 1.663 ms at 100 crew, from 18.300 to 9.387 ms at 500 crew, and from 61.539 to 34.854 ms at 1500 crew. Memory grows with assignments, duty endpoints, and crew histories, rather than with every crew-duty pair or every possible roster output.
+
+The subsequent [changing-duty follow-up](PERFORMANCE_FOLLOWUP.md) caches snapshot
+integrity issues and source defaults, and skips rolling-hour calculations when
+all history is too far from the target to contribute. Its separate measurements
+include complete web requests and preserve the still-unmet latency target.

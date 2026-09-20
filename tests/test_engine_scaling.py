@@ -24,6 +24,7 @@ class ReusableEngineTests(unittest.TestCase):
         self.assertEqual(set(engine.by_slot), slot_keys)
         self.assertEqual(set(engine._indexed_history), crew_keys)
         self.assertEqual(set(engine._indexed_sweeps), crew_keys)
+        self.assertEqual(set(engine._indexed_bounds), crew_keys)
 
     def test_indexed_matches_reference_for_full_query_outputs(self):
         for seed in range(10):
@@ -58,6 +59,8 @@ class ReusableEngineTests(unittest.TestCase):
         result = engine.coverage("TARGET", "captain")
         result["duty"]["required_roles"].append("tampered")
         result["candidates"][0]["sources"].append({"kind": "tampered"})
+        result["candidates"][0]["sources"][0]["file"] = "tampered"
+        result["candidates"][0]["reasons"].append("tampered")
         result["policy"]["label"] = "tampered"
         self.assertEqual(engine.coverage("TARGET", "captain"), expected)
 
@@ -95,6 +98,85 @@ class ReusableEngineTests(unittest.TestCase):
         indexed = Engine(datasets, DEMO_POLICY, "indexed")
         self.assertEqual(indexed.check("C-000000", "TARGET", "captain"),
                          reference.check("C-000000", "TARGET", "captain"))
+
+    def test_exact_time_boundaries_and_assigned_target_match_reference(self):
+        # Offsets are hours from target report. Exercise touching duties,
+        # exact minimum rest, and history just outside/inside a seven-day window.
+        cases = [(-18, -10), (-18, -9.999), (-8, 0), (-8, .001),
+                 (8, 16), (7.999, 16), (18, 26), (17.999, 26),
+                 (-176, -168), (-176, -167.999), (176, 184),
+                 (175.999, 184)]
+        for duration in (8, 200):
+            for a, b in cases:
+                for assigned in (False, True):
+                    with self.subTest(duration=duration, history=(a, b), assigned=assigned):
+                        datasets = workload(1, seed=113)
+                        crew = datasets["crew"]["records"][0]
+                        crew.update(role="captain", aircraft=["A320"], available=True, base="DEL")
+                        target = datasets["duties"]["records"][0]
+                        start = datetime.fromisoformat(target["report_at"])
+                        target["release_at"] = (start + timedelta(hours=duration)).isoformat()
+                        history = copy.deepcopy(target)
+                        history.update(duty_id="HISTORY", _source="history.csv", _record=7,
+                                       report_at=(start + timedelta(hours=a)).isoformat(),
+                                       release_at=(start + timedelta(hours=b)).isoformat())
+                        datasets["duties"]["records"] = [target, history]
+                        assignments = [{"crew_id": crew["crew_id"], "duty_id": "HISTORY", "role": "captain"}]
+                        if assigned:
+                            assignments.append({"crew_id": crew["crew_id"], "duty_id": "TARGET", "role": "captain"})
+                        datasets["assignments"]["records"] = assignments
+                        reference = Engine(datasets, DEMO_POLICY, "reference")
+                        indexed = Engine(datasets, DEMO_POLICY, "indexed")
+                        self.assertEqual(indexed.coverage("TARGET", "captain"),
+                                         reference.coverage("TARGET", "captain"))
+                        actual = indexed.check(crew["crew_id"], "TARGET", "captain", existing=assigned)
+                        self.assertEqual(actual, reference.check(crew["crew_id"], "TARGET", "captain", existing=assigned))
+                        self.assertEqual(actual["sources"][-1],
+                                         {"file": "history.csv", "record": 7, "kind": "duties"})
+                        self.assertEqual(len(actual["sources"]), 3)
+
+    def test_tied_ranking_and_history_reason_source_order(self):
+        datasets = workload(3, seed=113)
+        target = datasets["duties"]["records"][0]
+        records, assignments = [target], []
+        for crew in reversed(datasets["crew"]["records"]):
+            crew.update(name="Same name", role="captain", aircraft=["A320"], available=True, base="DEL")
+            # Deliberately reverse ID order; reasons/sources must retain input order.
+            for suffix in ("Z", "A"):
+                history = copy.deepcopy(target)
+                history.update(duty_id=crew["crew_id"] + suffix, _source=suffix + ".csv")
+                records.append(history)
+                assignments.append({"crew_id": crew["crew_id"], "duty_id": history["duty_id"], "role": "captain"})
+        datasets["crew"]["records"].reverse()
+        datasets["duties"]["records"] = records
+        datasets["assignments"]["records"] = assignments
+        reference = Engine(datasets, DEMO_POLICY, "reference")
+        indexed = Engine(datasets, DEMO_POLICY, "indexed")
+        actual = indexed.coverage("TARGET", "captain")
+        self.assertEqual(actual, reference.coverage("TARGET", "captain"))
+        self.assertEqual([c["crew_id"] for c in actual["candidates"]],
+                         sorted(indexed.crew))
+        for candidate in actual["candidates"]:
+            self.assertEqual(candidate["reasons"],
+                             [f"Overlaps duty {candidate['crew_id']}{suffix}." for suffix in ("Z", "A")])
+            self.assertEqual([s["file"] for s in candidate["sources"][2:]], ["Z.csv", "A.csv"])
+
+    def test_integrity_results_cannot_change_later_queries(self):
+        datasets = workload(2, seed=113)
+        datasets["assignments"]["records"].extend([
+            {"crew_id": "missing", "duty_id": "TARGET", "role": "captain"},
+            {"crew_id": "C-000001", "duty_id": "TARGET", "role": "wrong"},
+        ])
+        reference = Engine(datasets, DEMO_POLICY, "reference")
+        indexed = Engine(datasets, DEMO_POLICY, "indexed")
+        expected = reference.integrity()
+        self.assertEqual(len(expected), 2)
+        issues = indexed.integrity()
+        self.assertEqual(issues, expected)
+        issues.clear()
+        self.assertEqual(indexed.integrity(), expected)
+        with self.assertRaisesRegex(ValueError, "Resolve roster data issues first"):
+            indexed.coverage("TARGET", "captain")
 
 
 if __name__ == "__main__":
