@@ -1,0 +1,116 @@
+{
+  "selected": "indexed",
+  "correctness_gate": true,
+  "results": [
+    {
+      "size": 100,
+      "assignments": 200,
+      "strategy": "reference",
+      "p50_ms": 5.748,
+      "p95_ms": 6.473,
+      "queries_per_second": 174.95,
+      "peak_mb": 0.148,
+      "correctness_score": 100.0,
+      "samples": 7
+    },
+    {
+      "size": 100,
+      "assignments": 200,
+      "strategy": "indexed",
+      "p50_ms": 3.555,
+      "p95_ms": 4.754,
+      "queries_per_second": 261.6,
+      "peak_mb": 0.197,
+      "correctness_score": 100.0,
+      "samples": 7
+    },
+    {
+      "size": 1000,
+      "assignments": 2000,
+      "strategy": "reference",
+      "p50_ms": 169.103,
+      "p95_ms": 179.421,
+      "queries_per_second": 5.91,
+      "peak_mb": 1.414,
+      "correctness_score": 100.0,
+      "samples": 7
+    },
+    {
+      "size": 1000,
+      "assignments": 2000,
+      "strategy": "indexed",
+      "p50_ms": 38.567,
+      "p95_ms": 41.767,
+      "queries_per_second": 25.68,
+      "peak_mb": 1.867,
+      "correctness_score": 100.0,
+      "samples": 7
+    },
+    {
+      "size": 5000,
+      "assignments": 10000,
+      "strategy": "reference",
+      "p50_ms": 3712.366,
+      "p95_ms": 3874.229,
+      "queries_per_second": 0.27,
+      "peak_mb": 6.986,
+      "correctness_score": 100.0,
+      "samples": 7
+    },
+    {
+      "size": 5000,
+      "assignments": 10000,
+      "strategy": "indexed",
+      "p50_ms": 278.6,
+      "p95_ms": 344.3,
+      "queries_per_second": 3.6,
+      "peak_mb": 9.16,
+      "correctness_score": 100.0,
+      "samples": 7
+    }
+  ],
+  "scores": [
+    {
+      "strategy": "reference",
+      "geomean_p95_ms": 165.09,
+      "latency_growth": 598.521,
+      "data_growth": 50.0,
+      "under_200ms": 2,
+      "workloads": 3
+    },
+    {
+      "strategy": "indexed",
+      "geomean_p95_ms": 40.889,
+      "latency_growth": 72.423,
+      "data_growth": 50.0,
+      "under_200ms": 2,
+      "workloads": 3
+    }
+  ],
+  "holdout": [
+    {
+      "seed": 99017,
+      "crew": 37,
+      "equal": true
+    },
+    {
+      "seed": 41123,
+      "crew": 213,
+      "equal": true
+    },
+    {
+      "seed": 82507,
+      "crew": 401,
+      "equal": true
+    }
+  ],
+  "speedup": 4.04,
+  "machine": {
+    "python": "3.12.3",
+    "platform": "Linux",
+    "processor": "x86_64"
+  },
+  "method": "Cold engine construction + complete coverage results; sequential single-process calls; p95 is nearest-rank; memory excludes input data; no cache hits. Timings are local measurements, not a production SLA.",
+  "selection_rule": "Exact result equality on all measured and held-out workloads, then lowest geometric-mean p95 latency.",
+  "measured_at": "2026-09-20T08:18:05.182128+00:00"
+}

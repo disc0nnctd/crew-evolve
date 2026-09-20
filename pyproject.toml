@@ -1,0 +1,9 @@
+[project]
+name = "crew-evolve"
+version = "0.1.0"
+description = "A crew management assistant with inspectable, tested learning from corrections."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+crew-evolve = "crew_evolve.server:main"

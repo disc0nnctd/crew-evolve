@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crew Evolve · Operations workspace</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Crew Evolve home"><span class="brand-mark">CE</span><span>Crew Evolve<small>OPERATIONS WORKSPACE</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav aria-label="Workspace">
+      <button data-tab="operations" class="nav active" aria-current="page">Operations <span>01</span></button>
+      <button data-tab="data" class="nav">Crew data <span>02</span></button>
+      <button data-tab="learning" class="nav">Learning <span>03</span></button>
+      <button data-tab="performance" class="nav">Performance <span>04</span></button>
+    </nav>
+    <div class="sidebar-note"><span class="live-dot"></span> Local workspace<p>Your records stay on this machine. Model actions send context to your configured provider.</p></div>
+    <div class="version">Learn. Verify. Improve.</div>
+  </aside>
+  <div class="main-shell">
+    <header class="topbar"><div><span class="eyebrow">CREW MANAGEMENT</span><span class="divider">/</span><span id="breadcrumb">Operations</span></div><span id="model-state" class="pill">Loading workspace</span></header>
+    <main>
+      <div id="notice" role="status" aria-live="polite" hidden></div>
+      <section id="operations" class="page">
+        <div class="page-heading"><div><p class="eyebrow">YOUR OPERATION, IN VIEW</p><h1>A clearer plan for every duty.</h1><p class="muted">Review your roster, find cover, and see the checks behind each option.</p></div><button id="load-demo" class="button secondary">Explore example data</button></div>
+        <div id="stats" class="stats"></div>
+        <div class="operations-grid">
+          <section class="panel"><div class="panel-title"><div><h2>Duty roster</h2><p class="muted">Each row is one required crew position. Times are UTC.</p></div><button id="refresh" class="button small secondary">Refresh</button></div><div id="roster"></div></section>
+          <section class="panel advisor"><div class="panel-title"><div><span class="eyebrow">YOUR ASSISTANT</span><h2>Find the next move.</h2></div><span class="spark" aria-hidden="true">✦</span></div>
+            <form id="ask-form"><label for="question">Ask about your operation</label><textarea id="question" rows="3" placeholder="Who can cover D-100 as captain?" required maxlength="2000"></textarea><div class="form-footer"><span class="muted small-text">Uses a learned workflow or your model.</span><button class="button" type="submit">Ask assistant</button></div></form>
+            <div class="quick-actions"><button id="quick-summary" class="text-button">Workspace summary</button><button id="quick-roster" class="text-button">Check roster</button></div>
+            <div id="answer" aria-live="polite"><div class="empty compact"><div class="empty-icon">↗</div><h3>Start with a duty.</h3><p>Choose “Find cover” on an open position. Every candidate comes with the checks and records behind the result.</p></div></div>
+          </section>
+        </div>
+        <p class="footnote">Results apply only to your imported duty blocks and configured policies. They are not a complete regulatory compliance assessment.</p>
+      </section>
+      <section id="data" class="page" hidden>
+        <div class="page-heading"><div><p class="eyebrow">MAKE YOUR DATA USABLE</p><h1>Your columns. A shared understanding.</h1><p class="muted">Review field mappings once. Accepted corrections teach future imports.</p></div></div>
+        <div class="two-col"><section class="panel padded"><h2>Import a table</h2><p class="muted">CSV, TSV, JSON arrays, or JSONL. Up to 50,000 records per file.</p><form id="upload-form"><label for="kind">Table</label><select id="kind"><option value="crew">Crew members</option><option value="duties">Duty blocks</option><option value="assignments">Assignments</option></select><label for="file">Data file</label><input id="file" type="file" accept=".csv,.tsv,.json,.jsonl,.ndjson" required><button class="button" type="submit">Inspect file</button></form><p class="footnote">An accepted import replaces that table. The original file content is retained locally. Unmapped columns are preserved in the original.</p></section><section class="panel padded"><h2>Connected tables</h2><div id="tables"></div><div class="callout"><strong>Meaning needs a review.</strong><p>“Available” must mean available for assignment. Times need a timezone. Each duty block lists one position per required role.</p></div></section></div>
+        <section id="import-review" class="panel padded" hidden><div class="panel-title"><div><h2>Review the mapping</h2><p id="import-summary" class="muted"></p></div><button id="analyze" class="button secondary">Suggest with model</button></div><p class="footnote">“Suggest with model” sends column names and the first few records to your configured provider. Suggestions do not change your data.</p><div id="mapping-issue" class="callout"></div><div id="mapping"></div><details><summary>Preview original records</summary><div id="import-sample" class="table-wrap"></div></details><button id="accept-import" class="button">Accept mapping and replace table</button></section>
+      </section>
+      <section id="learning" class="page" hidden>
+        <div class="page-heading"><div><p class="eyebrow">BETTER WITH EVERY CORRECTION</p><h1>Learning you can inspect.</h1><p class="muted">Corrections are replayed before activation. Planning policies always need your review.</p></div></div>
+        <div class="two-col"><section class="panel padded"><h2>Teach a workflow</h2><p class="muted">Correct what a phrase should do. Coverage examples need a duty ID and role; other workflows cover the whole workspace.</p><form id="teach-form"><label for="teach-question">When I say</label><input id="teach-question" placeholder="Find someone for D-100 as captain" maxlength="2000" required><label for="teach-action">I mean</label><select id="teach-action"><option value="coverage">Find coverage for that duty and role</option><option value="roster">Show the whole roster</option><option value="summary">Summarize the workspace</option></select><button class="button" type="submit">Test and learn correction</button></form></section>
+        <section class="panel padded"><h2>Propose a planning policy</h2><p class="muted">Compare a proposed policy against your current roster before choosing to activate it.</p><form id="policy-form"><label for="policy-label">Policy name</label><input id="policy-label" required maxlength="200"><div class="three-col"><div><label for="rest">Minimum rest (h)</label><input id="rest" type="number" min="0.1" max="72" step="0.1" required></div><div><label for="duty-limit">Duty limit (h)</label><input id="duty-limit" type="number" min="0.1" max="24" step="0.1" required></div><div><label for="week-limit">Seven-day limit (h)</label><input id="week-limit" type="number" min="0.1" max="168" step="0.1" required></div></div><label for="policy-reason">Why change it?</label><input id="policy-reason" placeholder="Explain the operational reason" required maxlength="2000"><button class="button secondary" type="submit">Compare proposal</button></form><details><summary>Ask the model to draft a proposal</summary><form id="policy-ai-form"><label for="policy-request">Requested change</label><input id="policy-request" placeholder="Increase minimum rest to 12 hours" required><button class="button secondary" type="submit">Draft and compare</button></form></details></section></div>
+        <section class="panel padded"><h2>Change history</h2><p class="muted">A passing replay covers saved examples, not every unseen situation.</p><div id="history"></div></section>
+      </section>
+      <section id="performance" class="page" hidden>
+        <div class="page-heading"><div><p class="eyebrow">MEASURE BEFORE YOU OPTIMIZE</p><h1>Fast is a result. Prove it.</h1><p class="muted">Compare algorithms on growing workloads. An exact-result check comes before speed.</p></div><button id="run-benchmark" class="button">Benchmark algorithms</button></div>
+        <div class="two-col"><section class="panel padded"><span class="eyebrow">REFERENCE</span><h2>Full scans</h2><p class="muted">Scan assignments for every crew member. Sum each rolling window independently. Simple enough to check the optimized path against.</p></section><section class="panel padded"><span class="eyebrow">CANDIDATE</span><h2>Indexes + time sweep</h2><p class="muted">Find assignments by crew and position. Integrate duty-time events, then use binary searches to calculate rolling hours.</p></section></div>
+        <div id="benchmark-status" class="callout" role="status"></div><div id="benchmark-results"></div>
+        <section class="panel padded"><h2>What the scores mean</h2><div class="metric-explainer"><div><h3>Correctness score</h3><p>Exact agreement with reference results. Every measured and held-out case must pass before selection.</p></div><div><h3>Response time</h3><p>Median and 95th-percentile latency include building indexes and generating the complete result. No cache hits.</p></div><div><h3>Scale and memory</h3><p>Compare latency growth to data growth, queries per second, and peak allocated memory. Measurements are local, not a service guarantee.</p></div></div><p class="footnote">The optimization agent selects from reviewed algorithms. It does not run model-generated code. Repeated workspace queries also use a bounded cache invalidated whenever data or policy changes.</p></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
