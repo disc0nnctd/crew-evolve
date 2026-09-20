@@ -97,3 +97,6 @@ This exercises importing, learned mappings, workflow transfer, coverage, assignm
 - Original imports and action history are retained locally. There is no archival/export lifecycle or multi-version roster restoration yet. Learning rollback does not rewrite already-imported data.
 
 See [architecture](docs/ARCHITECTURE.md), [data contract](docs/DATA.md), and [scaling plan](docs/SCALING.md).
+
+The [public-release plan](docs/RELEASE_PLAN.md) defines the proposed contribution,
+milestones, evaluation targets, and evidence needed before publishing.
