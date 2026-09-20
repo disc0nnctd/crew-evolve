@@ -1,9 +1,13 @@
 __pycache__/
 *.py[cod]
 .venv/
+.venv-research/
 .env
 .crew-evolve/
 *.sqlite*
 node_modules/
 artifacts/
 .pytest_cache/
+build/
+dist/
+*.egg-info/

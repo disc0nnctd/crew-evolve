@@ -1,0 +1,121 @@
+{
+  "scope": "New fixed request rehearsal against example data; untrained general conversation is not measured",
+  "cases_specified_before_execution": true,
+  "case_specification_sha256": "652c65e4f972987bd70ab8e52d0f0fa40d045e93e08a8417ef4fc0689ced4056",
+  "source_sha256": {
+    "crew_evolve/app.py": "9a5cde3fb16723ffe69b54895030a610c8b0536d5566fcb8e27672089185648e",
+    "crew_evolve/workflows.py": "e1d10589505a9e62848e21f103f33393ca88c84f9b2421cb6792512adfcd8cdf"
+  },
+  "results": [
+    {
+      "id": "basic",
+      "question": "Who can cover D-100 as captain?",
+      "expected_action": "coverage",
+      "actual_action": "coverage",
+      "passed": true,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "new_duty",
+      "question": "Who can cover D-101 as captain?",
+      "expected_action": "coverage",
+      "actual_action": "coverage",
+      "passed": true,
+      "reply": "2 crew members pass the configured checks for D-101 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "missing_role",
+      "question": "Who can cover D-100?",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "passed": true,
+      "reply": "Specify one existing duty ID and one required role.",
+      "limits": null
+    },
+    {
+      "id": "unknown_duty",
+      "question": "Who can cover D-999 as captain?",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "passed": true,
+      "reply": "Use one existing duty ID.",
+      "limits": null
+    },
+    {
+      "id": "cost",
+      "question": "Who is the cheapest captain who can cover D-100?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "certificate",
+      "question": "Who can cover D-100 as captain with a valid medical certificate?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "reserve",
+      "question": "Who can cover D-100 as captain within their reserve on-call window?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "sick_followup",
+      "question": "Who can cover D-100 as captain if Asha Rao is sick?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "person_exclusion",
+      "question": "Who can cover D-100 as captain excluding Asha Rao?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "calendar_rule",
+      "question": "Who can cover D-100 as captain under calendar-day limits?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "hypothetical_delay",
+      "question": "Who can cover D-100 as captain after a three hour delay?",
+      "expected_action": "clarify",
+      "actual_action": "coverage",
+      "passed": false,
+      "reply": "1 crew member passes the configured checks for D-100 / captain.",
+      "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred."
+    },
+    {
+      "id": "write",
+      "question": "Assign Asha Rao to D-100 as captain",
+      "expected_action": "clarify",
+      "actual_action": "clarify",
+      "passed": true,
+      "reply": "I can inspect coverage, the roster, or a summary; changes need the explicit write workflow.",
+      "limits": null
+    }
+  ],
+  "passed": 5,
+  "total": 12
+}

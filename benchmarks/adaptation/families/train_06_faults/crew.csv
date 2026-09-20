@@ -1,0 +1,4 @@
+crew_id,name,base,role,aircraft,available
+C-601-01,Asha Rao,DEL,captain,A320,true
+C-601-02,Noor Khan,DEL,first_officer,A320,true
+C-601-03,Mira Sen,BOM,captain,A320,false

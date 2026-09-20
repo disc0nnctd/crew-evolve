@@ -1,0 +1,300 @@
+{
+  "cprofile": {
+    "hotspots_by_cumulative_time": [
+      {
+        "calls": 8,
+        "cumulative_ms": 4087.986,
+        "file": "crew_evolve/engine.py",
+        "function": "coverage",
+        "line": 280,
+        "primitive_calls": 8,
+        "self_ms": 64.671
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 3891.566,
+        "file": "crew_evolve/engine.py",
+        "function": "check",
+        "line": 205,
+        "primitive_calls": 80000,
+        "self_ms": 1234.153
+      },
+      {
+        "calls": 560000,
+        "cumulative_ms": 1232.246,
+        "file": "crew_evolve/engine.py",
+        "function": "source",
+        "line": 197,
+        "primitive_calls": 560000,
+        "self_ms": 943.131
+      },
+      {
+        "calls": 2080448,
+        "cumulative_ms": 454.286,
+        "file": "~",
+        "function": "<method 'get' of 'dict' objects>",
+        "line": 0,
+        "primitive_calls": 2080448,
+        "self_ms": 454.286
+      },
+      {
+        "calls": 560000,
+        "cumulative_ms": 431.887,
+        "file": "crew_evolve/engine.py",
+        "function": "hours",
+        "line": 33,
+        "primitive_calls": 560000,
+        "self_ms": 230.651
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 414.786,
+        "file": "crew_evolve/engine.py",
+        "function": "_indexed_peak",
+        "line": 160,
+        "primitive_calls": 80000,
+        "self_ms": 181.7
+      },
+      {
+        "calls": 640000,
+        "cumulative_ms": 231.642,
+        "file": "~",
+        "function": "<method 'total_seconds' of 'datetime.timedelta' objects>",
+        "line": 0,
+        "primitive_calls": 640000,
+        "self_ms": 231.642
+      },
+      {
+        "calls": 160000,
+        "cumulative_ms": 218.224,
+        "file": "~",
+        "function": "<built-in method builtins.max>",
+        "line": 0,
+        "primitive_calls": 160000,
+        "self_ms": 172.58
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 160.651,
+        "file": "~",
+        "function": "<built-in method builtins.any>",
+        "line": 0,
+        "primitive_calls": 80000,
+        "self_ms": 86.809
+      },
+      {
+        "calls": 240000,
+        "cumulative_ms": 116.956,
+        "file": "~",
+        "function": "<built-in method builtins.round>",
+        "line": 0,
+        "primitive_calls": 240000,
+        "self_ms": 116.956
+      },
+      {
+        "calls": 8,
+        "cumulative_ms": 102.149,
+        "file": "~",
+        "function": "<method 'sort' of 'list' objects>",
+        "line": 0,
+        "primitive_calls": 8,
+        "self_ms": 53.346
+      },
+      {
+        "calls": 440872,
+        "cumulative_ms": 91.816,
+        "file": "~",
+        "function": "<method 'append' of 'list' objects>",
+        "line": 0,
+        "primitive_calls": 440872,
+        "self_ms": 91.816
+      },
+      {
+        "calls": 480000,
+        "cumulative_ms": 73.842,
+        "file": "crew_evolve/engine.py",
+        "function": "<genexpr>",
+        "line": 267,
+        "primitive_calls": 480000,
+        "self_ms": 73.842
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 48.803,
+        "file": "crew_evolve/engine.py",
+        "function": "<lambda>",
+        "line": 287,
+        "primitive_calls": 80000,
+        "self_ms": 48.803
+      },
+      {
+        "calls": 400000,
+        "cumulative_ms": 45.644,
+        "file": "crew_evolve/engine.py",
+        "function": "<lambda>",
+        "line": 257,
+        "primitive_calls": 400000,
+        "self_ms": 45.644
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 28.498,
+        "file": "~",
+        "function": "<built-in method builtins.min>",
+        "line": 0,
+        "primitive_calls": 80000,
+        "self_ms": 28.498
+      },
+      {
+        "calls": 8,
+        "cumulative_ms": 28.337,
+        "file": "~",
+        "function": "<built-in method builtins.sum>",
+        "line": 0,
+        "primitive_calls": 8,
+        "self_ms": 7.967
+      },
+      {
+        "calls": 80008,
+        "cumulative_ms": 20.37,
+        "file": "crew_evolve/engine.py",
+        "function": "<genexpr>",
+        "line": 289,
+        "primitive_calls": 80008,
+        "self_ms": 20.37
+      },
+      {
+        "calls": 224,
+        "cumulative_ms": 1.233,
+        "file": "/usr/lib/python3.12/copy.py",
+        "function": "deepcopy",
+        "line": 118,
+        "primitive_calls": 16,
+        "self_ms": 0.558
+      },
+      {
+        "calls": 16,
+        "cumulative_ms": 0.933,
+        "file": "/usr/lib/python3.12/copy.py",
+        "function": "_deepcopy_dict",
+        "line": 217,
+        "primitive_calls": 16,
+        "self_ms": 0.203
+      }
+    ],
+    "requests_profiled": 8
+  },
+  "full_result_integrity": {
+    "engine_returns_all_candidates": true,
+    "expected_candidate_count": 10000,
+    "profiled_candidate_counts": {
+      "TARGET-0000": 10000,
+      "TARGET-0001": 10000,
+      "TARGET-0002": 10000,
+      "TARGET-0003": 10000,
+      "TARGET-0004": 10000,
+      "TARGET-0005": 10000,
+      "TARGET-0006": 10000,
+      "TARGET-0007": 10000
+    },
+    "profiled_hashes": {
+      "TARGET-0000": "2ef0ab29e6a09c404fcc86be26879f40d710380801b1779a76599470b507624a",
+      "TARGET-0001": "dbbd16e3382a2e1c53652a17dfe5d65de1191eac77de2956e9bde1157b9692a0",
+      "TARGET-0002": "d5d2487e9f082e3c0d8b108763d88fd21c20f3e76eca6bdfc7982c91e0c3cd20",
+      "TARGET-0003": "7f5a5d6bf7fbdfc1d16838c65842506b5265f8affaf6b76002916b92d76a1824",
+      "TARGET-0004": "49f0b60aa40664cca82e2748fcb29a8574fa5c4df2cd0c445f47d7323d02b00d",
+      "TARGET-0005": "658c65e20d162240b12c920708aa5d150bfafa65a07dc0f8e7da690e74aadb08",
+      "TARGET-0006": "43d0e4e3005f247b56238f43d84ff3a55a57a1f130d061e39bb8f78d10bea94b",
+      "TARGET-0007": "1e5b3ad470066a00227aa94efd83d18dd9f9f9aa099d79420746093fb2ff0dfc"
+    },
+    "profiled_matches_unprofiled": true,
+    "unprofiled_candidate_counts": {
+      "TARGET-0000": 10000,
+      "TARGET-0001": 10000,
+      "TARGET-0002": 10000,
+      "TARGET-0003": 10000,
+      "TARGET-0004": 10000,
+      "TARGET-0005": 10000,
+      "TARGET-0006": 10000,
+      "TARGET-0007": 10000
+    },
+    "unprofiled_hashes": {
+      "TARGET-0000": "2ef0ab29e6a09c404fcc86be26879f40d710380801b1779a76599470b507624a",
+      "TARGET-0001": "dbbd16e3382a2e1c53652a17dfe5d65de1191eac77de2956e9bde1157b9692a0",
+      "TARGET-0002": "d5d2487e9f082e3c0d8b108763d88fd21c20f3e76eca6bdfc7982c91e0c3cd20",
+      "TARGET-0003": "7f5a5d6bf7fbdfc1d16838c65842506b5265f8affaf6b76002916b92d76a1824",
+      "TARGET-0004": "49f0b60aa40664cca82e2748fcb29a8574fa5c4df2cd0c445f47d7323d02b00d",
+      "TARGET-0005": "658c65e20d162240b12c920708aa5d150bfafa65a07dc0f8e7da690e74aadb08",
+      "TARGET-0006": "43d0e4e3005f247b56238f43d84ff3a55a57a1f130d061e39bb8f78d10bea94b",
+      "TARGET-0007": "1e5b3ad470066a00227aa94efd83d18dd9f9f9aa099d79420746093fb2ff0dfc"
+    },
+    "warmup_candidate_count": 10000
+  },
+  "garbage_collection": {
+    "enabled": true,
+    "thresholds": [
+      700,
+      10,
+      10
+    ]
+  },
+  "machine": {
+    "cpu_count": 22,
+    "git_commit": "1d1ddf7d4766a56594a59832baf32e413c0ca2fb",
+    "git_dirty": true,
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "release": "7.0.0-31-generic",
+    "source_fingerprint": "0f40707de8da0a6ac8deb30b9f7c767e7b0c68b453f4fbbebe1ecd857a5e1447",
+    "system": "Linux"
+  },
+  "profile": "direct-engine-query-profile",
+  "scope": "bounded direct Engine.coverage calls; no HTTP, model, or result-cache timing",
+  "timing_ms": {
+    "cold_indexed_engine_construction": 1826.44,
+    "cprofile_warm_requests": {
+      "count": 8,
+      "overhead_included": true,
+      "total": 4089.049
+    },
+    "unprofiled_warm_requests": {
+      "count": 8,
+      "durations": [
+        155.264,
+        412.69,
+        190.162,
+        160.214,
+        154.625,
+        414.556,
+        177.539,
+        164.883
+      ],
+      "mean": 228.742,
+      "p50": 164.883,
+      "p95": 414.556,
+      "total": 1829.933
+    },
+    "warmup_request_excluded": true
+  },
+  "workload": {
+    "assignments": 50000,
+    "crew": 10000,
+    "duties": 50064,
+    "history_per_crew": 5,
+    "role": "captain",
+    "rotating_requests": 8,
+    "target_ids": [
+      "TARGET-0000",
+      "TARGET-0001",
+      "TARGET-0002",
+      "TARGET-0003",
+      "TARGET-0004",
+      "TARGET-0005",
+      "TARGET-0006",
+      "TARGET-0007"
+    ]
+  }
+}

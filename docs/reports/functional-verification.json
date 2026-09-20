@@ -1,0 +1,24 @@
+{
+  "implementation_commit": "1cc2f411d86d10f76e68ef413783a1c470351e8c",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -q",
+      "exit_code": 0,
+      "output": "----------------------------------------------------------------------\nRan 137 tests in 18.095s\n\nOK (skipped=1)\n"
+    },
+    {
+      "command": "python3 -m tests.browser_check && python3 -m tests.browser_release",
+      "exit_code": 0,
+      "output": "PASS: real-browser import, learned mapping, workflow transfer, coverage, assignment, release, reviewed policy, benchmark, and mobile layouts.\nPASS: source-scoped inversion, reuse, unknown-source review, regression rejection, rollback, and mobile layout.\n"
+    },
+    {
+      "command": "python3 scripts/package_smoke.py --browser",
+      "exit_code": 0,
+      "output": "package smoke passed: crew_evolve-0.2.0rc1-py3-none-any.whl, crew-evolve-0.2.0rc1.tar.gz\n"
+    }
+  ],
+  "visibility_observed": "PRIVATE",
+  "review": "Luna implementation; Terra reviewed contracts/workflow/model/engine, UI/workspace/load, and restricted synthetic evaluation."
+}

@@ -1,4 +1,5 @@
 import copy
+import json
 import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
@@ -126,12 +127,86 @@ class AppTests(unittest.TestCase):
 
     def test_model_cannot_supply_answer_numbers_or_unknown_operations(self):
         self.app.model = FakeModel()
-        result = self.app.ask('Who can cover?')
+        result = self.app.ask('Who can cover D-100 as captain?')
         self.assertNotIn('999', result['reply'])
         self.assertEqual(result['result']['passing'], 1)
         self.app.model.route = lambda *args: {'action': 'assign', 'crew_id': 'C-02'}
         with self.assertRaises(ValueError):
-            self.app.ask('Assign someone')
+            self.app.ask('Who can cover D-100 as captain?')
+
+    def test_missing_targets_and_write_requests_do_not_reach_model(self):
+        from unittest.mock import Mock
+        self.app.model = FakeModel()
+        self.app.model.route = Mock(side_effect=AssertionError('Provider must not guess missing targets or interpret writes'))
+        before = self.app.state()['revision']
+        for question in ('Who can cover?', 'Assign someone', 'Who can cover D-100 and D-101 as captain?',
+                         "Don't show candidates; assign Asha to D-100 as captain"):
+            self.assertEqual(self.app.ask(question)['action'], 'clarify', question)
+        self.app.model.route.assert_not_called()
+        self.assertEqual(before, self.app.state()['revision'])
+
+    def test_model_cannot_substitute_request_target(self):
+        self.app.model = FakeModel()
+        self.app.model.route = lambda *args: {'action': 'coverage', 'duty_id': 'D-101', 'role': 'captain'}
+        self.assertEqual(self.app.ask('Who can cover D-100 as captain?')['action'], 'clarify')
+
+    def test_model_context_contains_only_requested_targets(self):
+        from unittest.mock import Mock
+        with self.app.store.connect() as db:
+            data = self.app.store.datasets(db)['duties']
+            data['records'][0]['required_roles'] = ['captain'] + [f'role_{i}' for i in range(5000)]
+            db.execute('UPDATE datasets SET payload=? WHERE kind=?', (json.dumps(data), 'duties'))
+            self.app.store.bump(db)
+        self.app.model = FakeModel()
+        self.app.model.route = Mock(return_value={'action': 'coverage', 'duty_id': 'D-100', 'role': 'captain'})
+        self.assertEqual(self.app.ask('Who can cover D-100 as captain?')['action'], 'coverage')
+        context = self.app.model.route.call_args.args[1]
+        self.assertEqual(context['duties'], [{'duty_id': 'D-100'}])
+        self.assertEqual(context['roles'], ['captain'])
+        self.assertLess(len(json.dumps(context)), 1000)
+
+    def test_local_model_evidence_survives_application_route(self):
+        from unittest.mock import patch
+        from crew_evolve.local_model import LocalModel
+        from tests.test_local_model import KeywordEncoder
+        self.app.teach('Find eligible crew for D-100 as captain', 'coverage')
+        self.app.model = LocalModel(encoder=KeywordEncoder())
+        # Exercise the provider branch separately from the reviewed phrase matcher.
+        with patch('crew_evolve.app.workflows.route', return_value=None):
+            answer = self.app.ask('Who could cover D-100 as captain?')
+        self.assertEqual(answer['action'], 'coverage')
+        self.assertTrue(answer['route_evidence']['inference'])
+        self.assertTrue(answer['route_evidence']['revision'])
+        self.assertEqual(answer['workflow_evidence']['source'], 'approved workflow example')
+        self.assertIn('model proposal', answer['route_source'])
+
+    def test_provider_evidence_is_bounded_and_detached(self):
+        trace = {'large': ['x' * 10000] * 1000, 'nan': float('nan'), 'infinity': float('inf')}
+        self.app.model = FakeModel()
+        self.app.model.route = lambda *args: {'action': 'coverage', 'duty_id': 'D-100', 'role': 'captain', 'evidence': trace}
+        answer = self.app.ask('Who can cover D-100 as captain?')
+        self.assertLess(len(json.dumps(answer['route_evidence'])), 6000)
+        self.assertIsNone(answer['route_evidence']['nan'])
+        self.assertIsNone(answer['route_evidence']['infinity'])
+        json.dumps(answer, allow_nan=False)
+        answer['route_evidence']['large'].clear()
+        self.assertEqual(len(trace['large']), 1000)
+
+    def test_wide_provider_evidence_has_a_total_byte_limit(self):
+        from crew_evolve.app import route_evidence
+        trace = {str(i): [{str(j): '\\' * 10000 for j in range(24)} for _ in range(10)] for i in range(24)}
+        bounded = route_evidence(trace)
+        self.assertLessEqual(len(json.dumps(bounded).encode('utf-8')), 8192)
+        self.assertTrue(bounded['truncated'])
+
+    def test_reused_engine_cannot_be_mutated_through_responses(self):
+        result = self.coverage()
+        result['result']['duty']['aircraft'][0] = 'TAMPERED'
+        state = self.app.state()
+        state['duties'][0]['aircraft'][0] = 'TAMPERED'
+        # A different query bypasses the prior result cache and uses the engine.
+        actual = self.app.execute({'action': 'coverage', 'duty_id': 'D-101', 'role': 'captain'})
+        self.assertEqual(actual['result']['duty']['aircraft'], ['A320'])
 
     def test_model_mapping_must_reference_real_columns(self):
         self.app.model = FakeModel()

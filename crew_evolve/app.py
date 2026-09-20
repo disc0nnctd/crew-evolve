@@ -5,33 +5,87 @@ import uuid
 import time
 import copy
 import threading
+import math
 from collections import OrderedDict
+from itertools import islice
 
-from . import learning
+from . import learning, contract_learning, workflows
+from .contracts import apply_contract, validate_contract
 from .data import FIELDS, infer_mapping, normalize_records, parse_table
 from .engine import Engine, compare_policy, validate_policy
-from .model import Model
+from .model import configured_model
 from .store import DEMO_POLICY, Store
+from .resources import asset_dir
+
+
+def source_name(value):
+    if not isinstance(value, str) or len(value) > 120:
+        raise ValueError("Source format must be a name of at most 120 characters.")
+    return value.strip()
+
+
+def route_evidence(value):
+    """Copy a small inspectable trace, even for a verbose provider response."""
+    remaining = 128
+
+    def bounded(item, depth=0):
+        nonlocal remaining
+        remaining -= 1
+        if depth >= 4 or remaining < 0:
+            return None
+        if isinstance(item, dict):
+            return {str(k)[:80]: bounded(v, depth + 1)
+                    for k, v in islice(item.items(), 24) if remaining > 0}
+        if isinstance(item, (list, tuple)):
+            return [bounded(v, depth + 1) for v in item[:10] if remaining > 0]
+        if isinstance(item, str):
+            return item[:512]
+        if isinstance(item, float):
+            return item if math.isfinite(item) else None
+        if item is None or isinstance(item, (bool, int)):
+            return item
+        return None
+
+    result = bounded(value)
+    if len(json.dumps(result, allow_nan=False).encode("utf-8")) > 8192:
+        return {"truncated": True, "reason": "Route evidence exceeded the 8 KiB response limit."}
+    return result
 
 
 class App:
     def __init__(self, store, model=None):
         self.store = store
-        self.model = model or Model()
+        self.model = model or configured_model()
         self.cache = OrderedDict()
         self.cache_lock = threading.Lock()
+        self.engine_cache = OrderedDict()
         self.optimization_lock = threading.Lock()
         self.optimization = {"running": False, "message": "No benchmark run yet."}
+
+    def snapshot_engine(self, db):
+        """Reuse an immutable engine only within the exact workspace version."""
+        key = (self.store.get(db, "revision"), self.store.get(db, "strategy"))
+        with self.cache_lock:
+            if key in self.engine_cache:
+                self.engine_cache.move_to_end(key)
+                return self.engine_cache[key]
+        engine = Engine(self.store.datasets(db), self.store.get(db, "policy"), key[1])
+        with self.cache_lock:
+            self.engine_cache[key] = engine
+            while len(self.engine_cache) > 2:
+                self.engine_cache.popitem(last=False)
+        return engine
 
     def state(self):
         with self.store.connect() as db:
             db.execute("BEGIN")
             datasets = self.store.datasets(db)
             policy = self.store.get(db, "policy")
-            engine = Engine(datasets, policy)
-            return {"revision": self.store.get(db, "revision"), "policy": policy,
+            engine = self.snapshot_engine(db)
+            result = {"revision": self.store.get(db, "revision"), "policy": policy,
                     "model": self.model.configured, "model_name": self.model.name if self.model.configured else None,
                     "tables": {k: {"source": v["source"], "count": len(v["records"]), "mapping": v["mapping"],
+                                   "source_contract": v.get("source_contract", ""), "contract_version": v.get("contract_version"),
                                    "records": v["records"][:100]} for k, v in datasets.items()},
                     "duties": list(engine.duties.values()), "roles": sorted({c["role"] for c in engine.crew.values()}),
                     "roster": engine.roster(), "learning": learning.history(db),
@@ -39,15 +93,21 @@ class App:
                     "strategy": self.store.get(db, "strategy"), "benchmark": self.store.get(db, "benchmark"),
                     "optimization": dict(self.optimization),
                     "audit": [dict(r) for r in db.execute("SELECT id,action,created FROM audit ORDER BY id DESC LIMIT 20")]}
+            return copy.deepcopy(result)
 
-    def preview(self, kind, filename, content):
+    def preview(self, kind, filename, content, source_contract=None):
         if kind not in FIELDS:
             raise ValueError("Choose crew, duties, or assignments.")
+        source_contract = source_name("" if source_contract is None else source_contract)
         headers, rows = parse_table(filename, content)
         with self.store.connect() as db:
-            mapping = infer_mapping(kind, headers, self.store.get(db, "learned").get("mappings", {}))
+            learned = self.store.get(db, "learned")
+            saved = contract_learning.lookup(learned, kind, source_contract, headers)
+            mapping = saved["contract"]["mapping"] if saved else infer_mapping(kind, headers, {} if source_contract else learned.get("mappings", {}))
             pending = {"id": uuid.uuid4().hex, "kind": kind, "source": filename.replace("\\", "/").split("/")[-1],
-                       "headers": headers, "rows": rows, "mapping": mapping, "original": content}
+                       "headers": headers, "rows": rows, "mapping": mapping, "original": content,
+                       "source_contract": source_contract, "transforms": {k: v for k, v in saved["contract"]["transforms"].items() if v["op"] != "identity"} if saved else {},
+                       "contract_version": saved["version"] if saved else None, "contract_reused": bool(saved)}
             db.execute("INSERT INTO imports VALUES (?,?)", (pending["id"], json.dumps(pending)))
             # Bound abandoned uploads without touching accepted source data.
             db.execute("DELETE FROM imports WHERE rowid NOT IN (SELECT rowid FROM imports ORDER BY rowid DESC LIMIT 10)")
@@ -56,13 +116,17 @@ class App:
     @staticmethod
     def preview_view(pending):
         try:
-            normalize_records(pending["kind"], pending["headers"], pending["rows"], pending["mapping"])
+            contract = validate_contract(pending["kind"], pending["headers"], pending["mapping"],
+                                         pending.get("transforms", {}), pending.get("source_contract") or "unscoped-review")
+            apply_contract(pending["kind"], pending["headers"], pending["rows"], contract)
             issue = None
         except ValueError as exc:
             issue = str(exc)
         return {k: pending[k] for k in ("id", "kind", "source", "headers", "mapping")} | {
             "sample": pending["rows"][:5], "count": len(pending["rows"]), "issue": issue,
-            "fields": FIELDS[pending["kind"]]}
+            "fields": FIELDS[pending["kind"]], "source_contract": pending.get("source_contract", ""),
+            "transforms": pending.get("transforms", {}), "contract_version": pending.get("contract_version"),
+            "contract_reused": pending.get("contract_reused", False)}
 
     @staticmethod
     def pending(db, import_id):
@@ -83,20 +147,60 @@ class App:
         pending["mapping"] = mapping
         return self.preview_view(pending) | {"uncertainties": suggestion.get("uncertainties", [])}
 
-    def accept_import(self, import_id, mapping, revision):
+    def test_import(self, import_id, mapping, transforms=None, source_contract=None):
+        with self.store.connect() as db:
+            db.execute("BEGIN")
+            pending = self.pending(db, import_id)
+            source_contract = source_name(pending.get("source_contract", "") if source_contract is None else source_contract)
+            if transforms is None:
+                transforms = pending.get("transforms", {}) if source_contract == pending.get("source_contract", "") else {}
+            try:
+                if transforms and not source_contract:
+                    raise ValueError("Name the source format before reviewing conversions.")
+                if source_contract:
+                    prepared = contract_learning.prepare(self.store, db, pending, mapping, transforms, source_contract)
+                    valid = prepared["status"] != "rejected"
+                    return {"valid": valid, "issue": None if valid else "This change conflicts with reviewed examples. Use a new source format name for a changed meaning.",
+                            "sample": prepared["records"][:5], "report": prepared["report"]}
+                contract = validate_contract(pending["kind"], pending["headers"], mapping, {}, "unscoped-review")
+                records = apply_contract(pending["kind"], pending["headers"], pending["rows"], contract)
+                return {"valid": True, "issue": None, "sample": records[:5],
+                        "report": {"records_checked": len(records), "scope": "Current import only; reviewed aliases are retained."}}
+            except (ValueError, TypeError) as exc:
+                return {"valid": False, "issue": str(exc), "sample": [], "report": {}}
+
+    def accept_import(self, import_id, mapping, revision, transforms=None, source_contract=None):
         with self.store.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             self.require_revision(db, revision)
             pending = self.pending(db, import_id)
-            records = normalize_records(pending["kind"], pending["headers"], pending["rows"], mapping)
+            source_contract = source_name(pending.get("source_contract", "") if source_contract is None else source_contract)
+            if transforms is None:
+                transforms = pending.get("transforms", {}) if source_contract == pending.get("source_contract", "") else {}
+            if transforms and not source_contract:
+                raise ValueError("Name the source format before learning conversions.")
+            if source_contract:
+                prepared = contract_learning.prepare(self.store, db, pending, mapping, transforms, source_contract)
+                outcome = contract_learning.record(self.store, db, prepared, f"Reviewed source format {source_contract}")
+                if outcome["status"] == "rejected":
+                    return {"accepted": False, "revision": self.store.get(db, "revision"), "learning": outcome}
+                records = prepared["records"]
+                contract = prepared["contract"]
+                source_contract = contract["source_contract"]
+            else:
+                contract = validate_contract(pending["kind"], pending["headers"], mapping, {}, "unscoped-review")
+                records = apply_contract(pending["kind"], pending["headers"], pending["rows"], contract)
+                outcome = learning.learn(self.store, db, {"kind": "mapping", "table": pending["kind"], "headers": pending["headers"], "expected": mapping},
+                                         f"Reviewed field mapping for {pending['source']}")
+                if outcome["status"] == "rejected":
+                    return {"accepted": False, "revision": self.store.get(db, "revision"), "learning": outcome}
             dataset = {"source": pending["source"], "original": pending["original"], "raw_records": pending["rows"],
-                       "mapping": mapping, "records": records}
+                       "mapping": contract["mapping"], "records": records, "source_contract": source_contract,
+                       "transforms": contract["transforms"], "contract_version": prepared["version"] if source_contract else None}
             db.execute("INSERT OR REPLACE INTO datasets VALUES (?,?)", (pending["kind"], json.dumps(dataset)))
-            outcome = learning.learn(self.store, db, {"kind": "mapping", "table": pending["kind"], "headers": pending["headers"], "expected": mapping},
-                                     f"Reviewed field mapping for {pending['source']}")
             db.execute("DELETE FROM imports WHERE id=?", (import_id,))
             self.store.audit(db, "import", {"kind": pending["kind"], "source": pending["source"], "records": len(records)})
-            return {"revision": self.store.bump(db), "learning": outcome}
+            return {"accepted": True, "revision": self.store.bump(db), "learning": outcome}
 
     def require_revision(self, db, revision):
         if type(revision) is not int or revision != self.store.get(db, "revision"):
@@ -105,6 +209,7 @@ class App:
     def execute(self, plan):
         if not isinstance(plan, dict):
             raise ValueError("An operation is required.")
+        plan = {key: plan[key] for key in ("action", "duty_id", "role") if key in plan}
         started = time.perf_counter()
         with self.store.connect() as db:
             db.execute("BEGIN")
@@ -117,7 +222,7 @@ class App:
                     self.cache.move_to_end(key)
                     answer["metrics"] = {"cache_hit": True, "strategy": strategy, "engine_ms": round((time.perf_counter() - started) * 1000, 3)}
                     return answer
-            engine = Engine(self.store.datasets(db), self.store.get(db, "policy"), strategy)
+            engine = self.snapshot_engine(db)
             action = plan.get("action")
             if action == "coverage":
                 result = engine.coverage(plan.get("duty_id"), plan.get("role"))
@@ -142,7 +247,7 @@ class App:
                 self.cache[key] = copy.deepcopy(answer)
                 while len(self.cache) > 16:
                     self.cache.popitem(last=False)
-            return answer
+            return copy.deepcopy(answer)
 
     def optimize(self):
         if not self.optimization_lock.acquire(blocking=False):
@@ -172,11 +277,19 @@ class App:
     def ask(self, question):
         self.validate_question(question)
         with self.store.connect() as db:
-            engine = Engine(self.store.datasets(db), self.store.get(db, "policy"))
+            db.execute("BEGIN")
+            engine = self.snapshot_engine(db)
             roles = sorted({r for d in engine.duties.values() for r in d["required_roles"]})
             key, duties, mentioned_roles = learning.workflow_key(question, engine.duties, roles)
-            known = self.store.get(db, "learned").get("workflows", {}).get(key)
-            context = {"duties": list(engine.duties.values()), "roles": roles}
+            approved = self.store.get(db, "learned").get("workflows", {})
+            known = approved.get(key)
+            # Interpretation needs named targets, not the entire operational table.
+            context = {"duties": [{"duty_id": duty} for duty in duties[:2]],
+                       "roles": mentioned_roles[:2],
+                       "approved_examples": list(islice(reversed(approved.items()), 20))}
+        guard = workflows.guard_request(question, engine.duties, roles)
+        if guard and not (known and guard.get("reason") == "unsupported or ambiguous request"):
+            return {"action": "clarify", "reply": guard["reply"], "route_source": "request checks", "reason": guard["reason"]}
         if known:
             plan = {"action": known}
             if known == "coverage":
@@ -185,11 +298,26 @@ class App:
                 plan.update(duty_id=duties[0], role=mentioned_roles[0])
             source = "learned workflow"
         else:
-            plan = self.model.route(question, context)
-            source = "model proposal, checked by the operations engine"
+            plan = workflows.route(question, engine.duties, roles, approved)
+            if plan:
+                source = "reviewed workflow with bounded phrase matching"
+            elif self.model.configured:
+                plan = self.model.route(question, context)
+                source = "model proposal, checked by the operations engine"
+            else:
+                return {"action": "clarify", "reply": "Teach this request in Learning, or choose an operation directly.", "route_source": "no approved workflow"}
+        if not isinstance(plan, dict):
+            raise ValueError("The model must suggest one allowed read-only operation.")
         if plan.get("action") == "clarify":
-            return {"action": "clarify", "reply": "I can check coverage for one duty and role, show the roster, or summarize the workspace. Please specify one of these."}
-        return self.execute(plan) | {"route_source": source}
+            return {"action": "clarify", "reply": "I can check coverage for one duty and role, show the roster, or summarize the workspace. Please specify one of these.",
+                    "route_source": source, "route_evidence": route_evidence(plan.get("evidence"))}
+        if plan.get("action") == "coverage" and (duties != [plan.get("duty_id")] or mentioned_roles != [plan.get("role")]):
+            return {"action": "clarify", "reply": "Include one exact duty and role; a model cannot choose a different target for your request."}
+        if plan.get("action") in ("roster", "summary") and (duties or mentioned_roles):
+            return {"action": "clarify", "reply": "Roster and summary cover the whole workspace. Use coverage for a named duty and role."}
+        return self.execute(plan) | {"route_source": source,
+                                    "workflow_evidence": route_evidence(plan.get("provenance")),
+                                    "route_evidence": route_evidence(plan.get("evidence"))}
 
     @staticmethod
     def validate_question(question):
@@ -204,12 +332,17 @@ class App:
             db.execute("BEGIN IMMEDIATE")
             engine = Engine(self.store.datasets(db), self.store.get(db, "policy"))
             roles = {r for d in engine.duties.values() for r in d["required_roles"]}
+            guard = workflows.guard_request(question, engine.duties, roles)
+            if guard and guard.get("reason") != "unsupported or ambiguous request":
+                raise ValueError(guard["reply"])
             key, duties, mentioned_roles = learning.workflow_key(question, engine.duties, roles)
             if action == "coverage" and (len(duties) != 1 or len(mentioned_roles) != 1):
                 raise ValueError("A coverage example must name one existing duty ID and one role (use spaces between role words).")
             if action != "coverage" and (duties or mentioned_roles):
                 raise ValueError("Roster and summary workflows cover the whole workspace. Use an example without a specific duty or role.")
             result = learning.learn(self.store, db, {"kind": "workflow", "key": key, "action": action}, f"Workflow correction: {question}")
+            if result["status"] == "active":
+                result["revision"] = self.store.bump(db)
             self.store.audit(db, "workflow_correction", {"question": question, "action": action, "learning": result["id"]})
             return result
 
@@ -283,15 +416,16 @@ class App:
             self.store.audit(db, "policy_activated", {"change_id": change_id})
             return {"revision": self.store.bump(db)}
 
-    def rollback(self, change_id):
+    def rollback(self, change_id, revision=None):
         with self.store.connect() as db:
             db.execute("BEGIN IMMEDIATE")
+            if revision is not None:
+                self.require_revision(db, revision)
             learning.rollback(self.store, db, change_id)
-            return {"ok": True}
+            return {"ok": True, "revision": self.store.bump(db)}
 
     def demo(self):
-        from pathlib import Path
-        root = Path(__file__).resolve().parent.parent / "examples"
+        root = asset_dir("examples")
         with self.store.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             if self.store.datasets(db):

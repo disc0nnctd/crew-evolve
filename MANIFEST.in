@@ -1,0 +1,42 @@
+include README.md
+include pyproject.toml
+include setup.py
+include MANIFEST.in
+include docs/INSTALL.md
+include scripts/package_smoke.py
+recursive-include crew_evolve *.py
+recursive-include web *
+recursive-include examples *.csv
+
+# Keep local outputs, research material, model weights, and operator data out
+# of source archives even if they are added to the checkout later.
+prune artifacts
+prune research
+prune docs/artifacts
+prune docs/research
+prune models
+prune docs/models
+prune workspaces
+prune docs/workspaces
+prune workspace
+prune private
+prune private_data
+prune operator_data
+prune .crew-evolve
+global-exclude *.sqlite
+global-exclude *.sqlite3
+global-exclude *.db
+global-exclude *.db-*
+global-exclude *.safetensors
+global-exclude *.gguf
+global-exclude *.onnx
+global-exclude *.pt
+global-exclude *.pth
+global-exclude *.bin
+global-exclude *.parquet
+global-exclude *.pem
+global-exclude *.key
+global-exclude *.secret
+global-exclude *.secrets
+global-exclude .env
+global-exclude .DS_Store

@@ -1,0 +1,185 @@
+{
+  "budgets": [
+    0,
+    1,
+    5,
+    10,
+    20
+  ],
+  "description": "Source-format adaptation benchmark; labels are outside model input.",
+  "families": [
+    {
+      "files": {
+        "assignments.csv": "e8a9df4000092f5715009ec9dfd71395ae2d4e660fa87a0cfafcd8dd8b3f15ce",
+        "crew.csv": "7afdd9192a45181d3ae612b3bb8437d6344e128b140e3ba17e06850873ac4b77",
+        "duties.csv": "19cb86622c26e06c2686c702b5030653410dc72cc0c6e01dcfc1946565a5b76c"
+      },
+      "labels": "labels/train_01_canonical.json",
+      "labels_sha256": "ad3f13eaec06328042db6ab711c1620fd81fdfe903f0f53d0ef7a2c38f6ab6fb",
+      "name": "train_01_canonical",
+      "seed": 101,
+      "split": "train",
+      "style": "canonical"
+    },
+    {
+      "files": {
+        "assignments.csv": "febe648fbdaa39c7cb1310218cbc380eaaec4b161cb8113303bf58a29c332fc6",
+        "crew.csv": "6f552bf116f290b5ad566eb0c11c4438a1d2f4550edd4fec42d8a8f3f5cf1aa6",
+        "duties.csv": "365eb8bd53ff4cab3304c396d24c0209109210b9611d29959c541331c09511ad"
+      },
+      "labels": "labels/train_02_aliases.json",
+      "labels_sha256": "42e05e0421d286e62a4e2564ff4a4489302851080321bb3c2eac2584f879f0c3",
+      "name": "train_02_aliases",
+      "seed": 203,
+      "split": "train",
+      "style": "aliases"
+    },
+    {
+      "files": {
+        "assignments.csv": "16f836a167e572d1370d4f6a8aff03fc7fe8669290b50baa205731c6159ab62d",
+        "crew.csv": "17325c5da0ca6d54585a9084a9d6857d2b08a7e59187c8f68d1d5e991afdf659",
+        "duties.csv": "5cbdee0774813fd41c2ac3f2e337e788b6b9990a5f7f917324264163b67bd04c"
+      },
+      "labels": "labels/train_03_cannot_work.json",
+      "labels_sha256": "0096c061ca4002875b4b91f5bffecb293d9184ba08b23246c293e1c4175051f3",
+      "name": "train_03_cannot_work",
+      "seed": 307,
+      "split": "train",
+      "style": "cannot_work"
+    },
+    {
+      "files": {
+        "assignments.csv": "dd08c6cf318071c0ed5686062ac8646a2695a59269fc572137adf1db0262d231",
+        "crew.csv": "74062a197feaef893ac2756d4d7cd8bd1580e5e0831bcc614ea46c9396177b8a",
+        "duties.csv": "93c60e2344e3243351ca722492dac58a3ef0c3907e08afba4d3d5d0f8c1a518a"
+      },
+      "labels": "labels/train_04_enum.json",
+      "labels_sha256": "5adc450230eeea93d0a744e9ceaf4ca1d481747e178910126ac71096c08e7efa",
+      "name": "train_04_enum",
+      "seed": 401,
+      "split": "train",
+      "style": "enum"
+    },
+    {
+      "files": {
+        "assignments.csv": "3464b62b76aa17fa3bebfd825987e48ce45868f61e6a542bbd3df889f6aa9750",
+        "crew.csv": "bde50fb842c141d1d8295d3e89a9662815c250cdf56f81589921acd4f14d967d",
+        "duties.csv": "65f92ca14cc5c649f58fc614d3f5a5b1fd7c6f33039aa9fc18e67b654146466a"
+      },
+      "labels": "labels/train_05_eu_dates.json",
+      "labels_sha256": "1e39256f61be06a154219d3da74b6a277243b955507a12b93b872484f8a4a06b",
+      "name": "train_05_eu_dates",
+      "seed": 509,
+      "split": "train",
+      "style": "eu_dates"
+    },
+    {
+      "files": {
+        "assignments.csv": "f6be25cb043daca328572ce727f7fee4255f5ebf043c49b1f3f7a5c758b0f04f",
+        "crew.csv": "5472c9bb203d32f6aa79a4218152232c34827668f8e264c67c40462d5f236825",
+        "duties.csv": "60f4d62fee9f2a53c40d1bf83a144360ea91cf3897082a48d8ec54816b709083"
+      },
+      "labels": "labels/train_06_faults.json",
+      "labels_sha256": "b6a76de8b155c640bc1ae0a5cf20f62dbe766f269b5eeb0c8eb97d0af5704cc2",
+      "name": "train_06_faults",
+      "seed": 601,
+      "split": "train",
+      "style": "canonical_faults"
+    },
+    {
+      "files": {
+        "assignments.csv": "4063082e168d10a4e140c602c53b424eeac46b7257b4a955d3fdc299c5365d24",
+        "crew.csv": "7d6e029ca2273740078183cb07807483fbf81c15d98fb4ac0bb50cef53399213",
+        "duties.csv": "3e9b4710a76801a1fd1a169813d20b9a6fd14d304de0820ea4a6231ac937de20"
+      },
+      "labels": "labels/development_01_polarity.json",
+      "labels_sha256": "7bb73d808e24780e28b515dbc4e29fbf5f23e4846fbe05578365e5d12398be0c",
+      "name": "development_01_polarity",
+      "seed": 701,
+      "split": "development",
+      "style": "polarity"
+    },
+    {
+      "files": {
+        "assignments.csv": "987ee8eb733726bf76f663464df6779c9ee8addd2b4180f224cff4ee2c3b4945",
+        "crew.csv": "835715ffd490d857b1a52d4ae48d336ce3b4951ea82957c9091f0d48468b2c73",
+        "duties.csv": "0c3e3c7db9d0cd961cc641aac474328f154d4e7572d163a52aebd30c60b3716e"
+      },
+      "labels": "labels/development_02_enum_dates.json",
+      "labels_sha256": "500e049ad736870f50ea1e8dde5e0e7cb2a986dee2da20392f2cabe3f2da5287",
+      "name": "development_02_enum_dates",
+      "seed": 809,
+      "split": "development",
+      "style": "enum_dates"
+    },
+    {
+      "files": {
+        "assignments.csv": "be89055051031deb86b47a07413c256f18ffe1112f2b2a8d3d0ec27d31098518",
+        "crew.csv": "7e1027708635e82deb6d8db5a3ae1d4f5168431860a3812aef7a9716a0b94aaa",
+        "duties.csv": "a0d92533c0bcf111cefe56f341b689b8422c27fef469aa02caf7914851868133"
+      },
+      "labels": "labels/development_03_faults.json",
+      "labels_sha256": "7acd9effbbe5d1d22f510c928ae1516e26f568f99132672f30c66a745d709d16",
+      "name": "development_03_faults",
+      "seed": 907,
+      "split": "development",
+      "style": "faults"
+    },
+    {
+      "files": {
+        "assignments.csv": "ca0b33826bbb302651addd71e122a030d5e3c72524281e4f853ecef584020384",
+        "crew.csv": "2ad2a299c637800cf1a8b851efaa8652d6e5517bbece94f884ac7a0930136b84",
+        "duties.csv": "af47a2e7b9c72c2a087e5ce46fd67b6010c343e5fcc18eaed6ffb7ad11c40b62"
+      },
+      "labels": "labels/final_v2_01_neg_enum.json",
+      "labels_sha256": "59f2aaa50b3d83581ead86cec5b65ed98c33d3e848a6da363e635abbe143182c",
+      "name": "final_v2_01_neg_enum",
+      "seed": 1301,
+      "split": "final",
+      "style": "v2_neg_enum"
+    },
+    {
+      "files": {
+        "assignments.csv": "7de3c75785d2760e0567f42cd45d3abf570855ca7ab4010e880be6df74f7c8f6",
+        "crew.csv": "018eae39d79fcae4d7b7ca16e2783caab6d9f1d7181ed3d85c46613d5c23201e",
+        "duties.csv": "eb94064def65172336c5ddab896ab301b3c3fbf2a46937487e1c3fbe6acd5631"
+      },
+      "labels": "labels/final_v2_02_local_dates.json",
+      "labels_sha256": "2bf85cdbff461415dd306fbccc7d092d01d143602421bf97d9af281884d7028f",
+      "name": "final_v2_02_local_dates",
+      "seed": 1409,
+      "split": "final",
+      "style": "v2_local_dates"
+    },
+    {
+      "files": {
+        "assignments.csv": "33e93630567508ad48575a7625ce404c0824dd3fe40f6f366521937e1854b03f",
+        "crew.csv": "f2fb5ead8c97e4b54aa634d3d30ce97f68c4b8fb608f6563a639d976430fa72e",
+        "duties.csv": "a1590fc144cd4de1fe06d14feb2cba991df805805760c5cf7270be0c7fb50b04"
+      },
+      "labels": "labels/final_v2_03_mixed_relations.json",
+      "labels_sha256": "38c6b935791c504566dc865f66207ce741edb7c3ab673bc7d1452b88c1677216",
+      "name": "final_v2_03_mixed_relations",
+      "seed": 1511,
+      "split": "final",
+      "style": "v2_mixed"
+    }
+  ],
+  "final_status": "v2 holdout reserved; no final evaluation included",
+  "labels_are_model_input": false,
+  "protocol_version": "2.0",
+  "retired_final_v1": "history/manifest-v1-retired.json",
+  "schema_version": "adaptation-v2",
+  "seeds": [
+    11,
+    23,
+    37,
+    41,
+    53
+  ],
+  "splits": {
+    "development": 3,
+    "final": 3,
+    "train": 6
+  }
+}

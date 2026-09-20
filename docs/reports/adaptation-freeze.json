@@ -1,0 +1,31 @@
+{
+  "frozen_at": "2026-09-20T09:43:48.988013+00:00",
+  "source_commit": "4448641160580a9a97f01a8f1c7905c44596912d",
+  "protocol_version": "2.0",
+  "methods": [
+    "aliases",
+    "contracts"
+  ],
+  "budgets": [
+    0,
+    1,
+    5,
+    10,
+    20
+  ],
+  "seeds": [
+    11,
+    23,
+    37,
+    41,
+    53
+  ],
+  "sha256": {
+    "benchmarks/adaptation/manifest.json": "f1f8e53bbfaedfe1741a9b5f095766a8a5c4f7607f409afe2e64859fe3981395",
+    "benchmarks/adaptation/protocol.py": "bfa9b4e3bbe75b39012aa00cd5ac208ae2141468b58722a61bd73d0dd59eb966",
+    "benchmarks/adaptation/generate.py": "3378e3930be89efa2e8d6aee7d7cbf0b971b4eeff0b01295e361b21f4b5e03a1",
+    "crew_evolve/contracts.py": "d3b87f8e7cad9f181239670987dd667f3731dccfc907fa0cd1bacf1478ea92f6",
+    "crew_evolve/data.py": "9dc3bb650978de0307f4bd4f9f7cd4fc173c058324c182a6b3f276a3926350a4"
+  },
+  "scope": "Author-generated internal synthetic evaluation; process-reserved final, not sealed, blind, or independent. No tuning after this freeze."
+}

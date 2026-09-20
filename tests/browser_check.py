@@ -51,6 +51,17 @@ def main():
                 expect(page.locator('#answer')).to_contain_text('learned workflow')
                 expect(page.locator('#answer')).to_contain_text('2 crew members pass')
 
+                # Extra conditions must not be silently answered as basic coverage.
+                for question, limitation in (
+                    ('Who can cover D-100 as captain with a valid medical certificate?', 'cannot verify certificate'),
+                    ('Who is the cheapest captain who can cover D-100?', 'cannot compare cost'),
+                    ('Who can cover D-100 as captain if Asha Rao is sick?', 'cannot evaluate hypothetical'),
+                ):
+                    page.get_by_label('Ask about your operation').fill(question)
+                    page.get_by_role('button', name='Ask assistant').click()
+                    expect(page.locator('#answer')).to_contain_text(limitation)
+                    expect(page.get_by_role('button', name='Assign to this position')).to_have_count(0)
+
                 page.get_by_role('button', name='Learning').click()
                 page.get_by_label('Minimum rest (h)').fill('12')
                 page.get_by_label('Why change it?').fill('Test a more conservative example policy')
@@ -66,6 +77,8 @@ def main():
                 mappings = {'Badge':'crew_id','Person':'name','Home station':'base','Position':'role','Fleet types':'aircraft','On call':'available'}
                 for label, field in mappings.items():
                     page.get_by_label(label, exact=True).select_option(field)
+                page.get_by_role('button', name='Test preview').click()
+                expect(page.locator('#transform-status')).to_contain_text('Preview passed')
                 page.get_by_role('button', name='Accept mapping and replace crew').click()
                 expect(page.locator('#notice')).to_contain_text('Table imported')
                 page.get_by_role('button', name='Inspect file').click()
@@ -84,7 +97,7 @@ def main():
                 page.screenshot(path=str(artifacts / 'performance-mobile.png'), full_page=True)
                 assert not errors, errors
                 browser.close()
-                print('PASS: real-browser import, learned mapping, workflow transfer, coverage, assignment, release, reviewed policy, benchmark, and mobile layouts.')
+                print('PASS: real-browser import, learned mapping, workflow transfer, coverage, unsupported-condition clarification, assignment, release, reviewed policy, benchmark, and mobile layouts.')
         finally:
             server.shutdown()
             server.server_close()

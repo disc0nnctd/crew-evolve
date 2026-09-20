@@ -1,0 +1,2009 @@
+{
+  "benchmark": "full-request-load",
+  "cache_isolation": {
+    "engine_cache_retained_after_cold_initialization": true,
+    "note": "Warm scenarios compare result-cache behavior with the immutable engine retained from cold initialization.",
+    "result_cache_reset_before_each_scenario": true
+  },
+  "cold_initialization": {
+    "cache_hit": false,
+    "latency_ms": 2847.106,
+    "scope": "first complete structured-plan HTTP request, including immutable engine construction",
+    "status": 200
+  },
+  "correctness_oracle": {
+    "crew_checked": 96,
+    "large_reference_skipped": true,
+    "note": "Reference checks are bounded separately; the 10k/50k load does not run reference coverage for every request.",
+    "passed": true,
+    "samples": [
+      {
+        "equal": true,
+        "target": "TARGET-0000"
+      },
+      {
+        "equal": true,
+        "target": "TARGET-0001"
+      },
+      {
+        "equal": true,
+        "target": "TARGET-0002"
+      }
+    ],
+    "strategy": "reference"
+  },
+  "http_response_oracle": {
+    "note": "Each client/scenario run compares complete sampled HTTP responses; large workloads use indexed direct shaping to avoid a quadratic reference scan.",
+    "passed": true,
+    "reference_for_full_workload": false,
+    "runs": [
+      {
+        "clients": 1,
+        "repeated": {
+          "note": "Full response fields are compared; large workloads use indexed direct shaping to avoid a quadratic reference scan.",
+          "passed": true,
+          "reference_for_full_workload": false,
+          "samples": [
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            }
+          ]
+        },
+        "rotating": {
+          "note": "Full response fields are compared; large workloads use indexed direct shaping to avoid a quadratic reference scan.",
+          "passed": true,
+          "reference_for_full_workload": false,
+          "samples": [
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0002"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0003"
+            }
+          ]
+        }
+      },
+      {
+        "clients": 4,
+        "repeated": {
+          "note": "Full response fields are compared; large workloads use indexed direct shaping to avoid a quadratic reference scan.",
+          "passed": true,
+          "reference_for_full_workload": false,
+          "samples": [
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            }
+          ]
+        },
+        "rotating": {
+          "note": "Full response fields are compared; large workloads use indexed direct shaping to avoid a quadratic reference scan.",
+          "passed": true,
+          "reference_for_full_workload": false,
+          "samples": [
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0001"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0004"
+            },
+            {
+              "equal": true,
+              "revision_equal": true,
+              "strategy": "indexed",
+              "target": "TARGET-0003"
+            }
+          ]
+        }
+      }
+    ],
+    "samples": [
+      {
+        "equal": true,
+        "revision_equal": true,
+        "strategy": "indexed",
+        "target": "TARGET-0001"
+      },
+      {
+        "equal": true,
+        "revision_equal": true,
+        "strategy": "indexed",
+        "target": "TARGET-0002"
+      },
+      {
+        "equal": true,
+        "revision_equal": true,
+        "strategy": "indexed",
+        "target": "TARGET-0003"
+      }
+    ]
+  },
+  "invalidation": {
+    "assignment_revision": 1,
+    "assignment_status": 200,
+    "current_version_expected": 1,
+    "passed": true,
+    "query_cache_hit": false,
+    "query_latency_ms": 2980.335,
+    "query_revision": 1,
+    "query_status": 200,
+    "stale_revision_error": "The workspace changed. Refresh and review the current data before applying this change.",
+    "stale_revision_rejected": true,
+    "stale_revision_status": 400
+  },
+  "machine": {
+    "code_hash": "c48f97ec319a47c4f0523b2414b0a8f9ac409344",
+    "cpu_count": 22,
+    "git_dirty": false,
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "release": "7.0.0-31-generic",
+    "source_fingerprint": "eba2f880c4326ccd186f036e6f91d3521254c02dfe7baa950632f2bcf6be4e47",
+    "system": "Linux"
+  },
+  "memory": {
+    "process_rss_high_water_mb": 442.27,
+    "rss_after_seed_mb": 143.414,
+    "source": "resource.getrusage(RUSAGE_SELF).ru_maxrss; Linux KiB high-water mark includes seeded data retained by this process"
+  },
+  "model_calls": 0,
+  "request_kind": "structured plans (no natural-language latency)",
+  "requests_note": "The default is a quick 100-request run. Use --requests 1000 for the required load run; rotating and repeated scenarios each use that count.",
+  "runs": [
+    {
+      "cache_isolation": {
+        "engine_cache_retained_after_cold_initialization": true,
+        "result_cache_reset_before_each_scenario": true
+      },
+      "clients": 1,
+      "repeated": {
+        "cache_hit_rate": 0.999,
+        "cache_hits": 999,
+        "clients": 1,
+        "error_count": 0,
+        "latency_definition": "client request wall time from JSON request start through response parse; closed-loop at most clients in flight",
+        "latency_scope": "structured plans over real loopback HTTP; no natural-language model calls",
+        "model_calls": 0,
+        "p50_ms": 8.183,
+        "p95_ms": 11.771,
+        "p99_ms": 13.979,
+        "queue_wall_ms": {
+          "p50": 8.183,
+          "p95": 11.771,
+          "p99": 13.979
+        },
+        "requests": 1000,
+        "response_samples": [
+          {
+            "latency_ms": 400.871,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 11.017,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 9.36,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          }
+        ],
+        "responses_counted": 1000,
+        "statuses": {
+          "200": 1000
+        },
+        "throughput_rps": 109.773,
+        "wall_seconds": 9.109724
+      },
+      "rotating": {
+        "cache_hit_rate": 0.0,
+        "cache_hits": 0,
+        "clients": 1,
+        "error_count": 0,
+        "latency_definition": "client request wall time from JSON request start through response parse; closed-loop at most clients in flight",
+        "latency_scope": "structured plans over real loopback HTTP; no natural-language model calls",
+        "model_calls": 0,
+        "p50_ms": 353.181,
+        "p95_ms": 618.8,
+        "p99_ms": 656.988,
+        "queue_wall_ms": {
+          "p50": 353.181,
+          "p95": 618.8,
+          "p99": 656.988
+        },
+        "requests": 1000,
+        "response_samples": [
+          {
+            "latency_ms": 346.372,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 299.358,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0002",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0002 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 3
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 3
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "b72e95af7d7cb7f21b778aff4ca207d327c70927a4332c58782bd77be084edac",
+                "duty": {
+                  "_record": 3,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0002",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T16:00:00Z",
+                  "report_at": "2026-10-13T08:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 382.103,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0003",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0003 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 4
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 4
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "cd69d3d48e6382cff8925d33316716b95532b46cb3d0743fa8b78a1f9b82951c",
+                "duty": {
+                  "_record": 4,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0003",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-14T04:00:00Z",
+                  "report_at": "2026-10-13T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          }
+        ],
+        "responses_counted": 1000,
+        "statuses": {
+          "200": 1000
+        },
+        "throughput_rps": 2.491,
+        "wall_seconds": 401.493246
+      }
+    },
+    {
+      "cache_isolation": {
+        "engine_cache_retained_after_cold_initialization": true,
+        "result_cache_reset_before_each_scenario": true
+      },
+      "clients": 4,
+      "repeated": {
+        "cache_hit_rate": 0.996,
+        "cache_hits": 996,
+        "clients": 4,
+        "error_count": 0,
+        "latency_definition": "client request wall time from JSON request start through response parse; closed-loop at most clients in flight",
+        "latency_scope": "structured plans over real loopback HTTP; no natural-language model calls",
+        "model_calls": 0,
+        "p50_ms": 37.06,
+        "p95_ms": 61.641,
+        "p99_ms": 103.901,
+        "queue_wall_ms": {
+          "p50": 37.06,
+          "p95": 61.641,
+          "p99": 103.901
+        },
+        "requests": 1000,
+        "response_samples": [
+          {
+            "latency_ms": 1399.265,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 1411.249,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 1733.822,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          }
+        ],
+        "responses_counted": 1000,
+        "statuses": {
+          "200": 1000
+        },
+        "throughput_rps": 80.692,
+        "wall_seconds": 12.392818
+      },
+      "rotating": {
+        "cache_hit_rate": 0.0,
+        "cache_hits": 0,
+        "clients": 4,
+        "error_count": 0,
+        "latency_definition": "client request wall time from JSON request start through response parse; closed-loop at most clients in flight",
+        "latency_scope": "structured plans over real loopback HTTP; no natural-language model calls",
+        "model_calls": 0,
+        "p50_ms": 1934.677,
+        "p95_ms": 2340.057,
+        "p99_ms": 2580.947,
+        "queue_wall_ms": {
+          "p50": 1934.677,
+          "p95": 2340.057,
+          "p99": 2580.947
+        },
+        "requests": 1000,
+        "response_samples": [
+          {
+            "latency_ms": 1872.677,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0001",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0001 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "8ea23be8f6159ce43772370db8a66ad3c4e90a4c4f4bf4ffd3ab6434952a591a",
+                "duty": {
+                  "_record": 2,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0001",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-13T04:00:00Z",
+                  "report_at": "2026-10-12T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 1923.834,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0004",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0004 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 5
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 5
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "9def0e2424304563fdaddbc9b6b660827a55bea2b54f2fff22785d31713fd00f",
+                "duty": {
+                  "_record": 5,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0004",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-14T16:00:00Z",
+                  "report_at": "2026-10-14T08:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          },
+          {
+            "latency_ms": 1979.613,
+            "response": {
+              "action": "coverage",
+              "plan": {
+                "action": "coverage",
+                "duty_id": "TARGET-0003",
+                "role": "captain"
+              },
+              "reply": "5754 crew members pass the configured checks for TARGET-0003 / captain.",
+              "result": {
+                "basis": "Qualified and available, duty length, rest on both sides, overlap, recorded location, rolling duty hours.",
+                "candidate_count": 10000,
+                "candidate_sample": [
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000000",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000000",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 1
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 4
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 65
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 66
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 67
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 68
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 69
+                      }
+                    ]
+                  },
+                  {
+                    "base": "DEL",
+                    "crew_id": "C-000001",
+                    "duty_hours": 8.0,
+                    "name": "Crew 000001",
+                    "passes": true,
+                    "peak_7day_hours": 8.0,
+                    "reasons": [],
+                    "role": "captain",
+                    "sources": [
+                      {
+                        "file": "Synthetic load benchmark crew",
+                        "kind": "crew",
+                        "record": 2
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 4
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 70
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 71
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 72
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 73
+                      },
+                      {
+                        "file": "Synthetic load benchmark duties",
+                        "kind": "duties",
+                        "record": 74
+                      }
+                    ]
+                  }
+                ],
+                "candidate_sample_count": 2,
+                "candidate_sha256": "cd69d3d48e6382cff8925d33316716b95532b46cb3d0743fa8b78a1f9b82951c",
+                "duty": {
+                  "_record": 4,
+                  "aircraft": [
+                    "A320"
+                  ],
+                  "duty_id": "TARGET-0003",
+                  "end_base": "DEL",
+                  "release_at": "2026-10-14T04:00:00Z",
+                  "report_at": "2026-10-13T20:00:00Z",
+                  "required_roles": [
+                    "captain"
+                  ],
+                  "start_base": "DEL"
+                },
+                "limits": "Only imported duty history is checked. No certification expiry, leave windows, positioning, flight-time limits, or jurisdiction rules are inferred.",
+                "passing": 5754,
+                "policy": {
+                  "label": "Example policy \u2014 replace with your operational rules",
+                  "max_7day_hours": 60,
+                  "max_duty_hours": 12,
+                  "min_rest_hours": 10
+                },
+                "role": "captain",
+                "truncated": true
+              },
+              "revision": 0
+            },
+            "status": 200
+          }
+        ],
+        "responses_counted": 1000,
+        "statuses": {
+          "200": 1000
+        },
+        "throughput_rps": 2.045,
+        "wall_seconds": 489.006431
+      }
+    }
+  ],
+  "workload": {
+    "assignments": 50000,
+    "crew": 10000,
+    "duties": 50064,
+    "history_per_crew": 5,
+    "rotating_targets": 32
+  }
+}

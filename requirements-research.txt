@@ -1,0 +1,8 @@
+# Optional offline experiment, tested on Python 3.12. Not app dependencies.
+numpy==1.26.4
+scikit-learn==1.8.0
+torch==2.11.0
+transformers==5.5.4
+sentence-transformers==5.4.0
+safetensors==0.7.0
+huggingface-hub==1.6.0

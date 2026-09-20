@@ -1,0 +1,62 @@
+{
+  "recorded_at": "2026-09-20T10:55:03.665720+00:00",
+  "scope": "Automated selected sample rehearsals; not an independent human trial, full source scenario benchmark, or model-training experiment",
+  "unit_tests": {
+    "command": "python3 -m unittest discover -q",
+    "run": 149,
+    "passed": 148,
+    "skipped": 1,
+    "failed": 0,
+    "seconds": 21.815
+  },
+  "sample": {
+    "command": "python3 scripts/sample_usefulness.py --sample-dir /home/notdc/aircrew-agent/problem_statement/data --output artifacts/sample-usefulness-final.json",
+    "summary": {
+      "capability_gaps": 1,
+      "completed": 8,
+      "expected_abstentions": 4,
+      "failures": 0,
+      "unsupported_gaps": 5
+    },
+    "source_unchanged": true,
+    "code_unchanged_during_run": true
+  },
+  "requests": {
+    "command": "python3 scripts/request_usefulness.py --output artifacts/request-usefulness-final.json",
+    "summary": {
+      "supported_task": {
+        "passed": 2,
+        "count": 2
+      },
+      "expected_clarification": {
+        "passed": 10,
+        "count": 10
+      }
+    },
+    "initial_misleading_answers": 7,
+    "same_case_specification": true
+  },
+  "browser": {
+    "python3 -m tests.browser_check": "passed including cost/certificate/sickness clarification and no assignment button",
+    "python3 -m tests.browser_release": "passed"
+  },
+  "review": {
+    "implementation": "Luna workers with root corrections and verification",
+    "reviewer": "Terra",
+    "verdict": "approved; projected-task usefulness only; source and capability gaps explicit"
+  },
+  "frozen_adaptation_source_hashes_unchanged": true,
+  "not_run": [
+    "model weight training",
+    "Laya inference benchmark",
+    "frozen adaptation final re-evaluation",
+    "human time savings study",
+    "complete original scenario legality evaluation"
+  ],
+  "artifacts_sha256": {
+    "sample-usefulness-final.json": "244ad549a53c7a4e7e1d14b86d8e49ff940115f676d3e7cc8247a38443a9b865",
+    "request-usefulness-initial.json": "85ffac7e3174ec6ebd105fa50c1e7ba77974da604dfe1c87b98ca663c4742b0b",
+    "request-usefulness-final.json": "d6c5287c0bf2e1c4000244887956e8124258694326643a17a8f357382796a271",
+    "source-compatibility-audit.json": "31edb9e6e6eb64ce30dfb2154efe78a66a498d25e8c00940135d84102ac61a1e"
+  }
+}

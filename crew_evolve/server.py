@@ -10,8 +10,9 @@ from pathlib import Path
 from .app import App
 from .model import ModelError
 from .store import Store
+from .resources import asset_dir
 
-WEB = Path(__file__).resolve().parent.parent / "web"
+WEB = asset_dir("web")
 MAX_BODY = 8 * 1024 * 1024
 
 
@@ -80,9 +81,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Request must be an object.")
             a = self.server.app
             routes = {
-                "/api/import/preview": lambda: a.preview(data.get("kind"), data.get("filename"), data.get("content")),
+                "/api/import/preview": lambda: a.preview(data.get("kind"), data.get("filename"), data.get("content"), data.get("source_contract")),
                 "/api/import/analyze": lambda: a.analyze(data.get("id")),
-                "/api/import/accept": lambda: a.accept_import(data.get("id"), data.get("mapping"), data.get("revision")),
+                "/api/import/test": lambda: a.test_import(data.get("id"), data.get("mapping"), data.get("transforms"), data.get("source_contract")),
+                "/api/import/accept": lambda: a.accept_import(data.get("id"), data.get("mapping"), data.get("revision"), data.get("transforms"), data.get("source_contract")),
                 "/api/query": lambda: a.execute(data.get("plan")),
                 "/api/ask": lambda: a.ask(data.get("question")),
                 "/api/teach": lambda: a.teach(data.get("question"), data.get("action")),
@@ -91,7 +93,7 @@ class Handler(BaseHTTPRequestHandler):
                 "/api/policy/propose": lambda: a.propose_policy(data.get("policy"), data.get("reason")),
                 "/api/policy/suggest": lambda: a.suggest_policy(data.get("request")),
                 "/api/policy/activate": lambda: a.activate_policy(data.get("id")),
-                "/api/learning/rollback": lambda: a.rollback(data.get("id")),
+                "/api/learning/rollback": lambda: a.rollback(data.get("id"), data.get("revision")),
                 "/api/demo": a.demo,
                 "/api/optimize": a.optimize,
             }

@@ -1,0 +1,300 @@
+{
+  "cprofile": {
+    "hotspots_by_cumulative_time": [
+      {
+        "calls": 8,
+        "cumulative_ms": 5338.062,
+        "file": "crew_evolve/engine.py",
+        "function": "coverage",
+        "line": 251,
+        "primitive_calls": 8,
+        "self_ms": 57.653
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 4714.41,
+        "file": "crew_evolve/engine.py",
+        "function": "check",
+        "line": 176,
+        "primitive_calls": 80000,
+        "self_ms": 1111.525
+      },
+      {
+        "calls": 560000,
+        "cumulative_ms": 1366.073,
+        "file": "crew_evolve/engine.py",
+        "function": "source",
+        "line": 172,
+        "primitive_calls": 560000,
+        "self_ms": 1039.705
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 1300.419,
+        "file": "crew_evolve/engine.py",
+        "function": "_indexed_peak",
+        "line": 141,
+        "primitive_calls": 80000,
+        "self_ms": 464.646
+      },
+      {
+        "calls": 3360448,
+        "cumulative_ms": 685.758,
+        "file": "~",
+        "function": "<method 'get' of 'dict' objects>",
+        "line": 0,
+        "primitive_calls": 3360448,
+        "self_ms": 685.758
+      },
+      {
+        "calls": 960000,
+        "cumulative_ms": 645.386,
+        "file": "crew_evolve/engine.py",
+        "function": "hours",
+        "line": 33,
+        "primitive_calls": 960000,
+        "self_ms": 348.706
+      },
+      {
+        "calls": 320000,
+        "cumulative_ms": 507.288,
+        "file": "crew_evolve/engine.py",
+        "function": "_sweep_integral",
+        "line": 135,
+        "primitive_calls": 320000,
+        "self_ms": 228.207
+      },
+      {
+        "calls": 8,
+        "cumulative_ms": 441.768,
+        "file": "crew_evolve/engine.py",
+        "function": "integrity",
+        "line": 162,
+        "primitive_calls": 8,
+        "self_ms": 202.681
+      },
+      {
+        "calls": 560000,
+        "cumulative_ms": 318.681,
+        "file": "~",
+        "function": "<built-in method builtins.max>",
+        "line": 0,
+        "primitive_calls": 560000,
+        "self_ms": 274.906
+      },
+      {
+        "calls": 960000,
+        "cumulative_ms": 296.681,
+        "file": "~",
+        "function": "<method 'total_seconds' of 'datetime.timedelta' objects>",
+        "line": 0,
+        "primitive_calls": 960000,
+        "self_ms": 296.681
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 153.841,
+        "file": "~",
+        "function": "<built-in method builtins.any>",
+        "line": 0,
+        "primitive_calls": 80000,
+        "self_ms": 84.429
+      },
+      {
+        "calls": 240000,
+        "cumulative_ms": 113.955,
+        "file": "~",
+        "function": "<built-in method builtins.round>",
+        "line": 0,
+        "primitive_calls": 240000,
+        "self_ms": 113.955
+      },
+      {
+        "calls": 8,
+        "cumulative_ms": 93.002,
+        "file": "~",
+        "function": "<method 'sort' of 'list' objects>",
+        "line": 0,
+        "primitive_calls": 8,
+        "self_ms": 47.557
+      },
+      {
+        "calls": 440872,
+        "cumulative_ms": 81.309,
+        "file": "~",
+        "function": "<method 'append' of 'list' objects>",
+        "line": 0,
+        "primitive_calls": 440872,
+        "self_ms": 81.309
+      },
+      {
+        "calls": 480000,
+        "cumulative_ms": 69.412,
+        "file": "crew_evolve/engine.py",
+        "function": "<genexpr>",
+        "line": 238,
+        "primitive_calls": 480000,
+        "self_ms": 69.412
+      },
+      {
+        "calls": 320000,
+        "cumulative_ms": 62.686,
+        "file": "~",
+        "function": "<built-in method _bisect.bisect_right>",
+        "line": 0,
+        "primitive_calls": 320000,
+        "self_ms": 62.686
+      },
+      {
+        "calls": 160000,
+        "cumulative_ms": 47.941,
+        "file": "~",
+        "function": "<built-in method builtins.min>",
+        "line": 0,
+        "primitive_calls": 160000,
+        "self_ms": 47.941
+      },
+      {
+        "calls": 80000,
+        "cumulative_ms": 45.445,
+        "file": "crew_evolve/engine.py",
+        "function": "<lambda>",
+        "line": 258,
+        "primitive_calls": 80000,
+        "self_ms": 45.445
+      },
+      {
+        "calls": 400000,
+        "cumulative_ms": 43.775,
+        "file": "crew_evolve/engine.py",
+        "function": "<lambda>",
+        "line": 228,
+        "primitive_calls": 400000,
+        "self_ms": 43.775
+      },
+      {
+        "calls": 8,
+        "cumulative_ms": 30.061,
+        "file": "~",
+        "function": "<built-in method builtins.sum>",
+        "line": 0,
+        "primitive_calls": 8,
+        "self_ms": 7.57
+      }
+    ],
+    "requests_profiled": 8
+  },
+  "full_result_integrity": {
+    "engine_returns_all_candidates": true,
+    "expected_candidate_count": 10000,
+    "profiled_candidate_counts": {
+      "TARGET-0000": 10000,
+      "TARGET-0001": 10000,
+      "TARGET-0002": 10000,
+      "TARGET-0003": 10000,
+      "TARGET-0004": 10000,
+      "TARGET-0005": 10000,
+      "TARGET-0006": 10000,
+      "TARGET-0007": 10000
+    },
+    "profiled_hashes": {
+      "TARGET-0000": "2ef0ab29e6a09c404fcc86be26879f40d710380801b1779a76599470b507624a",
+      "TARGET-0001": "dbbd16e3382a2e1c53652a17dfe5d65de1191eac77de2956e9bde1157b9692a0",
+      "TARGET-0002": "d5d2487e9f082e3c0d8b108763d88fd21c20f3e76eca6bdfc7982c91e0c3cd20",
+      "TARGET-0003": "7f5a5d6bf7fbdfc1d16838c65842506b5265f8affaf6b76002916b92d76a1824",
+      "TARGET-0004": "49f0b60aa40664cca82e2748fcb29a8574fa5c4df2cd0c445f47d7323d02b00d",
+      "TARGET-0005": "658c65e20d162240b12c920708aa5d150bfafa65a07dc0f8e7da690e74aadb08",
+      "TARGET-0006": "43d0e4e3005f247b56238f43d84ff3a55a57a1f130d061e39bb8f78d10bea94b",
+      "TARGET-0007": "1e5b3ad470066a00227aa94efd83d18dd9f9f9aa099d79420746093fb2ff0dfc"
+    },
+    "profiled_matches_unprofiled": true,
+    "unprofiled_candidate_counts": {
+      "TARGET-0000": 10000,
+      "TARGET-0001": 10000,
+      "TARGET-0002": 10000,
+      "TARGET-0003": 10000,
+      "TARGET-0004": 10000,
+      "TARGET-0005": 10000,
+      "TARGET-0006": 10000,
+      "TARGET-0007": 10000
+    },
+    "unprofiled_hashes": {
+      "TARGET-0000": "2ef0ab29e6a09c404fcc86be26879f40d710380801b1779a76599470b507624a",
+      "TARGET-0001": "dbbd16e3382a2e1c53652a17dfe5d65de1191eac77de2956e9bde1157b9692a0",
+      "TARGET-0002": "d5d2487e9f082e3c0d8b108763d88fd21c20f3e76eca6bdfc7982c91e0c3cd20",
+      "TARGET-0003": "7f5a5d6bf7fbdfc1d16838c65842506b5265f8affaf6b76002916b92d76a1824",
+      "TARGET-0004": "49f0b60aa40664cca82e2748fcb29a8574fa5c4df2cd0c445f47d7323d02b00d",
+      "TARGET-0005": "658c65e20d162240b12c920708aa5d150bfafa65a07dc0f8e7da690e74aadb08",
+      "TARGET-0006": "43d0e4e3005f247b56238f43d84ff3a55a57a1f130d061e39bb8f78d10bea94b",
+      "TARGET-0007": "1e5b3ad470066a00227aa94efd83d18dd9f9f9aa099d79420746093fb2ff0dfc"
+    },
+    "warmup_candidate_count": 10000
+  },
+  "garbage_collection": {
+    "enabled": true,
+    "thresholds": [
+      700,
+      10,
+      10
+    ]
+  },
+  "machine": {
+    "cpu_count": 22,
+    "git_commit": "1d1ddf7d4766a56594a59832baf32e413c0ca2fb",
+    "git_dirty": true,
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "release": "7.0.0-31-generic",
+    "source_fingerprint": "660d74e73d00b7dfdb7e9135edc81ad50dcfa609df2b2920c7bd73717c7c790d",
+    "system": "Linux"
+  },
+  "profile": "direct-engine-query-profile",
+  "scope": "bounded direct Engine.coverage calls; no HTTP, model, or result-cache timing",
+  "timing_ms": {
+    "cold_indexed_engine_construction": 1828.098,
+    "cprofile_warm_requests": {
+      "count": 8,
+      "overhead_included": true,
+      "total": 5339.041
+    },
+    "unprofiled_warm_requests": {
+      "count": 8,
+      "durations": [
+        232.412,
+        487.376,
+        244.531,
+        250.097,
+        233.492,
+        430.01,
+        246.772,
+        241.63
+      ],
+      "mean": 295.79,
+      "p50": 244.531,
+      "p95": 487.376,
+      "total": 2366.322
+    },
+    "warmup_request_excluded": true
+  },
+  "workload": {
+    "assignments": 50000,
+    "crew": 10000,
+    "duties": 50064,
+    "history_per_crew": 5,
+    "role": "captain",
+    "rotating_requests": 8,
+    "target_ids": [
+      "TARGET-0000",
+      "TARGET-0001",
+      "TARGET-0002",
+      "TARGET-0003",
+      "TARGET-0004",
+      "TARGET-0005",
+      "TARGET-0006",
+      "TARGET-0007"
+    ]
+  }
+}

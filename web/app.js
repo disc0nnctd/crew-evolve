@@ -1,5 +1,6 @@
 'use strict';
 let state, pending, activeTab = 'operations', lastQuestion = '', benchmarkTimer;
+let reviewState = {signature:null, valid:false, sequence:0};
 const $ = id => document.getElementById(id);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pretty = value => escape(JSON.stringify(value, null, 2));
@@ -81,24 +82,100 @@ $('quick-summary').onclick=event=>busy(event.currentTarget,()=>runPlan({action:'
 $('quick-roster').onclick=event=>busy(event.currentTarget,()=>runPlan({action:'roster'}));
 $('refresh').onclick=event=>busy(event.currentTarget,refresh);
 $('load-demo').onclick=event=>busy(event.currentTarget,async()=>{await api('/api/demo',{});await refresh();notice('Example crew and duties loaded. The example policy is for exploration only.');});
-$('upload-form').onsubmit=event=>{event.preventDefault();busy(event.submitter,async()=>{const file=$('file').files[0];if(!file)throw new Error('Choose a data file.');if(file.size>6*1024*1024)throw new Error('Use a file smaller than 6 MB.');pending=await api('/api/import/preview',{kind:$('kind').value,filename:file.name,content:await file.text()});renderMapping();});};
+$('upload-form').onsubmit=event=>{event.preventDefault();busy(event.submitter,async()=>{const file=$('file').files[0];if(!file)throw new Error('Choose a data file.');if(file.size>6*1024*1024)throw new Error('Use a file smaller than 6 MB.');const sourceContract=$('source-contract').value.trim();pending=await api('/api/import/preview',{kind:$('kind').value,filename:file.name,content:await file.text(),source_contract:sourceContract||undefined});if(pending.source_contract!==undefined)$('source-contract').value=pending.source_contract||sourceContract;renderMapping();});};
+function transformSpec(header,index) {
+  const saved=pending?.transforms?.[header]||{};
+  const op=saved.op||'identity';
+  const invert=Boolean(saved.invert);
+  const format=saved.format||'%d/%m/%Y %H:%M';
+  const timezone=saved.timezone||'UTC';
+  const values=saved.values||{};
+  const enumText=Object.entries(values).map(([raw,canonical])=>`${raw} = ${canonical}`).join('\n');
+  return `<div class="transform-config" data-transform-config="${index}" ${op==='identity'?'hidden':''}>${op==='boolean'?`<label class="check-label" for="invert-${index}"><input id="invert-${index}" type="checkbox" data-transform-invert="${index}" ${invert?'checked':''}> Invert boolean meaning <span class="label-hint">true becomes false</span></label><p class="transform-note">This is explicit and source-scoped. Review the changed values before accepting.</p>`:''}${op==='enum'?`<label for="enum-${index}">Value mapping <span class="label-hint">one raw = canonical per line</span></label><textarea id="enum-${index}" data-transform-enum="${index}" rows="3" placeholder="on = true\noff = false">${escape(enumText)}</textarea>`:''}${op==='datetime'?`<div class="transform-fields"><div><label for="format-${index}">Date format</label><input id="format-${index}" data-transform-format="${index}" value="${escape(format)}" placeholder="%d/%m/%Y %H:%M"></div><div><label for="timezone-${index}">Timezone</label><input id="timezone-${index}" data-transform-timezone="${index}" value="${escape(timezone)}" placeholder="UTC"></div></div>`:''}</div>`;
+}
+function transformRow(header,index) {
+  const saved=pending?.transforms?.[header]||{};
+  const selected=saved.op||'identity';
+  return `<div class="mapping-row"><div class="mapping-source"><label for="map-${index}">${escape(header)}</label><span class="source-value">source column</span></div><span class="mapping-arrow" aria-hidden="true">→</span><div class="mapping-target"><select id="map-${index}" data-header="${escape(header)}"><option value="">Keep in original only</option>${pending.fields.map(field=>`<option value="${field}" ${pending.mapping?.[header]===field?'selected':''}>${escape(human(field))}</option>`).join('')}</select><label class="transform-label" for="transform-${index}">Value meaning</label><select id="transform-${index}" class="transform-select" data-transform-op="${index}" data-header="${escape(header)}" aria-label="${escape(header)} transform"><option value="identity" ${selected==='identity'?'selected':''}>Identity · use as supplied</option><option value="boolean" ${selected==='boolean'?'selected':''}>Boolean · true/false</option><option value="enum" ${selected==='enum'?'selected':''}>Enum · map values</option><option value="datetime" ${selected==='datetime'?'selected':''}>Datetime · parse format</option></select>${transformSpec(header,index)}</div></div>`;
+}
 function renderMapping() {
-  $('import-review').hidden=false;$('import-summary').textContent=`${pending.source} · ${pending.count} records · replaces the ${pending.kind} table`;
+  $('import-review').hidden=false;
+  reviewState={signature:null,valid:false,sequence:reviewState.sequence+1};
+  const scope=$('source-contract').value.trim()||pending.source_contract||'';
+  if(pending.source_contract!==undefined)$('source-contract').value=pending.source_contract||scope;
+  const version=pending.contract_version==null?'':` · contract v${escape(pending.contract_version)}`;
+  $('import-summary').textContent=`${pending.source} · ${pending.count} records · replaces the ${pending.kind} table${version}`;
+  const reused=Boolean(pending.contract_reused);
+  $('contract-status').innerHTML=scope
+    ? `<span class="pill ${reused?'good':'warn'}">${reused?'Reused reviewed contract':'New contract scope'}</span><strong>${escape(scope)}</strong>${reused?`<span>v${escape(pending.contract_version||'latest')} transforms suggested from this source</span>`:'<span>Meaning is unreviewed until this import passes its test.</span>'}`
+    : `<span class="pill warn">Legacy import</span><span>No named source contract. Learned transforms cannot be reused without an explicit scope.</span>`;
   $('mapping-issue').textContent=pending.issue||'The proposed mapping passes structural checks. Review the meaning of each field before accepting.';
   if(pending.uncertainties?.length)$('mapping-issue').textContent+=' '+pending.uncertainties.join(' ');
-  $('mapping').innerHTML=pending.headers.map((header,index)=>`<div class="mapping-row"><label for="map-${index}">${escape(header)}</label><span>→</span><select id="map-${index}" data-header="${escape(header)}"><option value="">Keep in original only</option>${pending.fields.map(field=>`<option value="${field}" ${pending.mapping[header]===field?'selected':''}>${escape(human(field))}</option>`).join('')}</select></div>`).join('');
-  $('import-sample').innerHTML=table(pending.headers,pending.sample.map(row=>pending.headers.map(header=>escape(typeof row[header]==='object'?JSON.stringify(row[header]):row[header]))));
-  $('accept-import').textContent=`Accept mapping and replace ${pending.kind}`;
+  $('mapping').innerHTML=pending.headers.map(transformRow).join('');
+  $('import-sample').innerHTML=table(pending.headers,(pending.sample||[]).map(row=>pending.headers.map(header=>escape(typeof row[header]==='object'?JSON.stringify(row[header]):row[header]))));
+  $('normalized-sample').hidden=true;$('normalized-sample').innerHTML='';$('transform-status').hidden=true;$('accept-import').disabled=true;$('accept-import').textContent=`Accept mapping and replace ${pending.kind}`;
+  $('mapping').querySelectorAll('[data-transform-op]').forEach(select=>select.addEventListener('change',()=>{const index=Number(select.dataset.transformOp);const header=select.dataset.header;const container=document.querySelector(`[data-transform-config="${index}"]`);const old=pending.transforms?.[header]||{};pending.transforms={...(pending.transforms||{}),[header]:{...old,op:select.value}};if(container)container.outerHTML=transformSpec(header,index);bindTransformConfig(index);invalidateReview();}));
+  $('mapping').querySelectorAll('select[data-header]:not([data-transform-op])').forEach(select=>select.addEventListener('change',invalidateReview));
+  $('mapping').querySelectorAll('input,textarea').forEach(control=>control.addEventListener('input',invalidateReview));
 }
+function bindTransformConfig(index) {
+  const op=$(`transform-${index}`).value;
+  const config=document.querySelector(`[data-transform-config="${index}"]`);if(!config)return;
+  config.querySelectorAll('input,textarea').forEach(control=>control.addEventListener('input',invalidateReview));
+  if(op==='boolean')config.querySelector('input')?.addEventListener('change',invalidateReview);
+}
+function readTransforms() {
+  const result={};
+  $('mapping').querySelectorAll('[data-transform-op]').forEach(select=>{
+    const op=select.value;if(op==='identity')return;const index=Number(select.dataset.transformOp);const header=select.dataset.header;const spec={op};
+    if(op==='boolean')spec.invert=$(`invert-${index}`)?.checked||false;
+    if(op==='enum'){const values={};($(`enum-${index}`)?.value||'').split(/\r?\n/).forEach(line=>{const pivot=line.indexOf('=');if(pivot>0){const raw=line.slice(0,pivot).trim(),canonical=line.slice(pivot+1).trim();if(raw)values[raw]=canonical;}});spec.values=values;}
+    if(op==='datetime'){spec.format=$(`format-${index}`)?.value.trim()||'%d/%m/%Y %H:%M';spec.timezone=$(`timezone-${index}`)?.value.trim()||'UTC';}
+    result[header]=spec;
+  });return result;
+}
+function readMapping(){const result={};$('mapping').querySelectorAll('select[data-header]:not([data-transform-op])').forEach(select=>{if(select.value)result[select.dataset.header]=select.value;});return result;}
+function reviewSignature(){return JSON.stringify({mapping:readMapping(),transforms:readTransforms(),source_contract:$('source-contract').value.trim()});}
+function invalidateReview(){reviewState={signature:null,valid:false,sequence:reviewState.sequence+1};$('accept-import').disabled=true;}
+function clearInheritedContract(){
+  if(!pending)return;
+  const hadReuse=Boolean(pending.contract_reused)||Object.keys(pending.transforms||{}).length>0;
+  pending.contract_reused=false;pending.contract_version=null;pending.transforms={};
+  if(hadReuse){
+    $('mapping').querySelectorAll('[data-transform-op]').forEach(select=>{select.value='identity';const index=Number(select.dataset.transformOp);const config=document.querySelector(`[data-transform-config="${index}"]`);if(config)config.outerHTML=transformSpec(select.dataset.header,index);});
+  }
+  $('contract-status').innerHTML='<span class="pill warn">Fresh review required</span><span>Source scope changed. Previously reviewed transforms were cleared.</span>';
+  invalidateReview();
+}
+function renderTransformTest(result) {
+  const report=result.report||{};const passed=result.valid!==false;
+  reviewState.valid=passed;
+  $('transform-status').hidden=false;$('transform-status').className=`callout ${passed?'success':'failure'}`;
+  $('transform-status').innerHTML=passed?`<strong>Preview passed.</strong> ${escape(report.after_passed??'')} of ${escape(report.cases??'')} replay cases pass${report.regressions?.length?`; ${report.regressions.length} regression(s) need review.`:''}`:`<strong>Preview rejected.</strong> ${escape(result.issue||'Review the mapping and transforms before accepting.')}`;
+  const sample=result.sample||[];if(sample.length){const headers=Object.keys(sample[0]);$('normalized-sample').innerHTML=`<p class="sample-label">Normalized records</p>${table(headers,sample.map(row=>headers.map(header=>escape(typeof row[header]==='object'?JSON.stringify(row[header]):row[header]))))}`;$('normalized-sample').hidden=false;}else $('normalized-sample').hidden=true;
+  $('accept-import').disabled=!passed;
+}
+$('source-contract').addEventListener('input',()=>{if(!pending)return;const scope=$('source-contract').value.trim();if(scope!==(pending.source_contract||''))clearInheritedContract();else invalidateReview();});
 $('analyze').onclick=event=>busy(event.currentTarget,async()=>{pending=await api('/api/import/analyze',{id:pending.id});renderMapping();});
-$('accept-import').onclick=event=>busy(event.currentTarget,async()=>{const mapping={};$('mapping').querySelectorAll('select').forEach(select=>{if(select.value)mapping[select.dataset.header]=select.value;});const result=await api('/api/import/accept',{id:pending.id,mapping,revision:state.revision});pending=null;$('import-review').hidden=true;await refresh();notice(`Table imported. Mapping learning: ${result.learning.status}. Review the roster for data issues.`);});
+$('test-import').onclick=event=>busy(event.currentTarget,async()=>{const mapping=readMapping();const transforms=readTransforms();const sourceContract=$('source-contract').value.trim();const signature=reviewSignature();const sequence=++reviewState.sequence;const result=await api('/api/import/test',{id:pending.id,mapping,transforms,source_contract:sourceContract});if(sequence!==reviewState.sequence||signature!==reviewSignature()){invalidateReview();notice('The form changed while testing. Run Test preview again for the current review.',true);return;}pending.transforms=transforms;reviewState.signature=signature;renderTransformTest(result);});
+$('accept-import').onclick=event=>busy(event.currentTarget,async()=>{const mapping=readMapping();const transforms=readTransforms();const sourceContract=$('source-contract').value.trim();if(!reviewState.valid||reviewState.signature!==reviewSignature()){invalidateReview();notice('Run Test preview after the latest mapping, transform, or source-scope change.',true);return;}const result=await api('/api/import/accept',{id:pending.id,mapping,revision:state.revision,transforms,source_contract:sourceContract});if(result.accepted===false||result.learning?.status==='rejected'){const report=result.learning?.report||{};const count=(report.regressions||[]).length;renderTransformTest({valid:false,issue:count?`This contract was rejected because it regresses ${count} saved case${count===1?'':'s'}.`:'This contract was rejected during replay.',report});await refresh();notice('Import review rejected. Existing records were left unchanged.',true);return;}pending=null;reviewState={signature:null,valid:false,sequence:reviewState.sequence+1};$('import-review').hidden=true;await refresh();notice(`Table imported. Mapping learning: ${result.learning?.status||'accepted'}. Review the roster for data issues.`);});
 $('teach-form').onsubmit=event=>{event.preventDefault();busy(event.submitter,async()=>{const result=await api('/api/teach',{question:$('teach-question').value,action:$('teach-action').value});await refresh();notice(result.status==='rejected'?'Correction conflicts with saved examples. It was recorded but not activated.':`Workflow ${result.status}. ${result.report.after_passed}/${result.report.cases} saved examples pass.`,result.status==='rejected');});};
 $('policy-form').onsubmit=event=>{event.preventDefault();busy(event.submitter,async()=>{await api('/api/policy/propose',{policy:{label:$('policy-label').value,min_rest_hours:Number($('rest').value),max_duty_hours:Number($('duty-limit').value),max_7day_hours:Number($('week-limit').value)},reason:$('policy-reason').value});await refresh();notice('Policy compared. Review the results in change history before activating.');});};
 $('policy-ai-form').onsubmit=event=>{event.preventDefault();busy(event.submitter,async()=>{const result=await api('/api/policy/suggest',{request:$('policy-request').value});await refresh();notice(result.question||'Model proposal compared. Review it in change history; the active policy has not changed.');});};
 function renderHistory() {
   const latest=state.learning.find(change=>change.status==='active'&&change.kind!=='policy');
-  $('history').innerHTML=state.learning.length?state.learning.map(change=>`<article class="history-card"><div class="history-title"><div><span class="eyebrow">${escape(change.kind)} · ${escape(change.created)}</span><h3>${escape(change.reason)}</h3></div><span class="pill ${change.status==='active'?'good':change.status==='rejected'?'bad':'warn'}">${escape(human(change.status))}</span></div>${change.kind==='policy'?`<p>${change.report.checks} candidate checks · ${change.report.changes.length} outcomes change · ${change.report.new_assignment_failures} assigned positions newly fail.</p><span class="policy-values">Rest ${change.before_state.min_rest_hours}h → ${change.after_state.min_rest_hours}h · duty ${change.before_state.max_duty_hours}h → ${change.after_state.max_duty_hours}h · seven-day ${change.before_state.max_7day_hours}h → ${change.after_state.max_7day_hours}h</span>${change.status==='proposed'?`<button class="button small secondary" data-activate="${change.id}" ${change.report.revision!==state.revision?'disabled':''}>${change.report.revision!==state.revision?'Workspace changed; compare a new proposal':'Activate reviewed policy'}</button>`:''}`:`<p>Replay: ${change.report.before_passed} → ${change.report.after_passed} of ${change.report.cases} examples passing. ${change.report.regressions.length} regressions.</p>${latest?.id===change.id?`<button class="button small secondary" data-rollback="${change.id}">Roll back learning</button>`:''}`}<details><summary>Inspect evidence and changes</summary><pre>${pretty({before:change.before_state,after:change.after_state,report:change.report})}</pre></details></article>`).join(''):'<div class="empty compact"><h3>No learning hidden behind the scenes.</h3><p>Review an import or teach a workflow. Its checks and activation decision will appear here.</p></div>';
-  $('history').querySelectorAll('[data-rollback]').forEach(button=>button.onclick=()=>busy(button,async()=>{await api('/api/learning/rollback',{id:Number(button.dataset.rollback)});await refresh();notice('Learning rolled back. Imported records and operating policies are unchanged.');}));
+  $('history').innerHTML=state.learning.length?state.learning.map(change=>{
+    const report=change.report||{};const regressions=report.regressions||[];const contract=change.kind==='contract';
+    const scope=report.source_contract||change.source_contract||change.after_state?.source_contract;
+    const version=report.contract_version||change.contract_version||change.after_state?.contract_version;
+    const title=contract&&scope?`<span class="pill scope-pill">${escape(scope)}${version?` · v${escape(version)}`:''}</span>`:'';
+    let body;
+    if(change.kind==='policy')body=`<p>${report.checks||0} candidate checks · ${(report.changes||[]).length} outcomes change · ${report.new_assignment_failures||0} assigned positions newly fail.</p><span class="policy-values">Rest ${change.before_state.min_rest_hours}h → ${change.after_state.min_rest_hours}h · duty ${change.before_state.max_duty_hours}h → ${change.after_state.max_duty_hours}h · seven-day ${change.before_state.max_7day_hours}h → ${change.after_state.max_7day_hours}h</span>${change.status==='proposed'?`<button class="button small secondary" data-activate="${change.id}" ${report.revision!==state.revision?'disabled':''}>${report.revision!==state.revision?'Workspace changed; compare a new proposal':'Activate reviewed policy'}</button>`:''}`;
+    else if(contract)body=`<p>Scope ${scope?`<strong>${escape(scope)}</strong>`:'<span class="muted">unnamed</span>'}${version?` · version ${escape(version)}`:''}. Replay: ${report.before_passed??0} → ${report.after_passed??0} of ${report.cases??0} examples passing. ${regressions.length} regressions.</p><p class="footnote">Original imported records are retained. Rolling back this contract changes future reuse only.</p>${latest?.id===change.id?`<button class="button small secondary" data-rollback="${change.id}">Roll back learning</button>`:''}`;
+    else body=`<p>Replay: ${report.before_passed??0} → ${report.after_passed??0} of ${report.cases??0} examples passing. ${regressions.length} regressions.</p>${latest?.id===change.id?`<button class="button small secondary" data-rollback="${change.id}">Roll back learning</button>`:''}`;
+    return `<article class="history-card"><div class="history-title"><div><span class="eyebrow">${escape(change.kind)} · ${escape(change.created)}</span><h3>${escape(change.reason)}</h3>${title}</div><span class="pill ${change.status==='active'?'good':change.status==='rejected'?'bad':'warn'}">${escape(human(change.status))}</span></div>${body}<details><summary>Inspect evidence and changes</summary><pre>${pretty({before:change.before_state,after:change.after_state,report:report})}</pre></details></article>`;
+  }).join(''):'<div class="empty compact"><h3>No learning hidden behind the scenes.</h3><p>Review an import or teach a workflow. Its checks and activation decision will appear here.</p></div>';
+  $('history').querySelectorAll('[data-rollback]').forEach(button=>button.onclick=()=>busy(button,async()=>{await api('/api/learning/rollback',{id:Number(button.dataset.rollback),revision:state.revision});await refresh();notice('Learning rolled back. Imported records and operating policies are unchanged.');}));
   $('history').querySelectorAll('[data-activate]').forEach(button=>button.onclick=()=>busy(button,async()=>{await api('/api/policy/activate',{id:Number(button.dataset.activate)});await refresh();notice('Reviewed policy activated. The roster has been checked again.');}));
 }
 function renderBenchmark() {

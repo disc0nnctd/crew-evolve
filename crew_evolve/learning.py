@@ -7,25 +7,13 @@ Policy proposals use a separate human-activation path.
 
 import copy
 import json
-import re
 
 from .data import infer_mapping, normal
+from .workflows import workflow_key as bounded_workflow_key
 
 
 def workflow_key(question, duty_ids, roles):
-    text = question.strip().casefold()
-    found_duties, found_roles = [], []
-    for duty in sorted(duty_ids, key=len, reverse=True):
-        pattern = r"(?<!\w)" + re.escape(duty.casefold()) + r"(?!\w)"
-        if re.search(pattern, text):
-            found_duties.append(duty)
-            text = re.sub(pattern, "{duty}", text)
-    for role in sorted(roles, key=len, reverse=True):
-        pattern = r"(?<!\w)" + re.escape(role.casefold().replace("_", " ")) + r"(?!\w)"
-        if re.search(pattern, text):
-            found_roles.append(role)
-            text = re.sub(pattern, "{role}", text)
-    return re.sub(r"\s+", " ", text), found_duties, found_roles
+    return bounded_workflow_key(question, duty_ids, roles)
 
 
 def evaluate(learned, case):
